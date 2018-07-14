@@ -1,0 +1,28 @@
+
+{% load staticfiles %}
+
+	<!-- footer> -->
+	<!-- class="navbar-fixed-bottom"-->
+	<br/><br/><br/><br/><br/>
+	<div class="container-fluid" style='margin-left:15px'>
+		<p>
+			<a href="{% url 'about' %}">About</a>
+			| <a href="{% url 'contact' %}">Contact</a>
+			{% if promcount %}
+				| Promise count: {{promcount}}
+			{% endif %}
+			| PromiseTracker.com will NEVER share nor sell your data
+		</p>
+	</div>
+	<!-- </footer>	 -->
+
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<!--<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>-->
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<!--<script src="../../assets/js/docs.min.js"></script>-->
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<!--<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>-->

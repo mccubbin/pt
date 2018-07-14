@@ -1,0 +1,24 @@
+{% extends "baserobots.html" %}
+{% load record_tags %}
+
+{% block bodyblock %}
+
+<div class='row'>
+	<div class="col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+
+		<div class="well" style="margin-bottom:0px;padding-bottom:5px;padding-top:5px;">
+
+			<h4>Status: {{ status }}</h4>
+			<p>Privacy: {{ privacy }}</p>
+			<p>Created: {{ cdate|timesince:current }} ago</p>
+			<p>Completed: {{ mdate|timesince:current }} ago</p>
+			<p>Details: {{ details }}</p>
+			<!-- <p>{{ promid }}</p> -->
+
+		</div>
+
+	</div>
+</div>
+
+{% endblock %}
+

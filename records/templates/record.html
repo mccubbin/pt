@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load record_tags %}
+{% load crispy_forms_tags %}
+
+
+{% block bodyblock %}
+
+
+
+<div class="row">
+	<div class="col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+
+		<form method="post"> {% csrf_token %}
+			{% if form.errors %}
+				<div class="alert alert-danger">
+					<strong>{{ form.non_field_errors|escape }}</strong>
+				</div>
+			{% endif %}
+			<div id="div_id_search">
+				<div>
+					<label for="id_search" class="requiredField">Search</label>
+				</div>
+				<div class="row">
+					<div class="col-xs-9 col-sm-10 col-md-10 col-lg-10" style="padding-right: 0px">
+						{{form.search}}
+					</div>
+					<!-- Make xs either 3 or 2, depending on if most phones are 400ish or 700ish -->
+					<div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="padding: 0px">
+						<input type="submit" value="Search" class="btn btn-default"/>
+					</div>
+				</div>
+			</div>
+
+		</form>
+
+		<!-- Set cursor to search field on load -->
+		<script>
+			window.onload = document.getElementById("id_search").focus();
+			// not possible to display soft keyboard onload :(
+			// window.onload = document.getElementById("id_search").click();
+		</script>
+
+
+		{% if rows %}
+			<br/>
+			<div class="panel panel-default">
+				<div class="panel-body" style="padding-top:10px;padding-bottom:10px;">
+					<h4>{{truthful}}% truthful</h4>
+					<h4>{{fulfilled}} fulfilled</h4>
+					<h4>{{broken}} broken</h4>
+				</div>
+			</div>
+
+
+			<h3 style="margin-top:25px;margin-bottom:5px;">Public promises</h3>
+			<hr style="height:2px;border:none;color:#333;background-color:#333;margin-top:5px;" />
+
+			{% for row in rows %}
+				{% if row.1 == "public" %}
+					<a href = "/crm/{{row.0|encode36}}/" style="text-decoration:none;color: black;">
+						<div class="well" style="margin-bottom:15px;padding-bottom:5px;padding-top:5px;">
+							<h4>Status: {{ row.2 }}</h4>
+							<p>Created: {{ row.3|timesince:current }} ago</p>
+							<p>Completed: {{ row.3|timesince:current }} ago</p>
+							<p>Details: {{ row.5 }}</p>
+							<!-- {{ row.date|date:"Y-m-d" }}
+							<a href="/crm/{{row.promid}}"> {{row.details}}</a>-->
+						</div>
+					</a>
+				{% endif %}
+			{% endfor %}
+
+		{% elif not nosearch %}
+			<h3>No public promises to display.</h3>
+		{% endif %}
+
+	</div>
+</div>
+
+
+<!-- FOR TESTING PURPOSES -->
+<!-- <div class="container" style="background-color: blue; height: 250px">
+	<div class="row" style="background-color: red; height: 150px">
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xs-offset-3" style="background-color: yellow; height: 100px">
+			<div class="row" style="background-color: red; height: 50px">
+				<div class="col-xs-9 col-sm-10 col-md-10 col-lg-10" style="background-color: black; height: 25px"></div>
+				<div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="background-color: pink; height: 25px"></div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="background-color: green; height: 100px">
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="background-color: black; height: 50px"></div>
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="background-color: pink; height: 50px"></div>
+	</div>
+</div> -->
+
+
+{% endblock %}

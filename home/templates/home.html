@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block jumbotron %}
+
+	<!-- Main jumbotron for a primary marketing message or call to action -->
+	<div class='row'>
+		<div class="col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+			<div class="jumbotron" style="padding-top: 15px; padding-bottom: 15px">
+				<h2 style="text-align: center; margin-top: 5px">PromiseTracker</h2>
+				<h3>Make promises online for free.</h3>
+				<p>1. Enter promise and 2 emails</p>
+				<p>2. Check email, both must approve promise</p>
+				<p>3. Mark promise as "Fulfilled" or "Broken"</p>
+				<p>4. <a href="/record">Search by email to view records</a></p>
+				<br/>
+				<p>No account required.</p>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block bodyblock %}
+
+	<!--<div class="container-fluid" style='margin-left:15px'>
+		<div class="col-sm-2">
+			<br>
+			<center>
+			<img src="{% static '../media/img/cromisehand-black.png' %}" class="responsive-img" style='max-height:100px;' alt="logo">
+			</center>
+		</div>
+		<div class="col-sm-10">
+			<br>
+			<center><h3>Welcome to PromiseTracker</h3></center>
+			{% include "includes/html01.html" %}
+		</div>
+	</div>-->
+
+{% endblock %}

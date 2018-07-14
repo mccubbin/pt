@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--The 3 meta tags must come first in head; any head content must come after these -->
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>PromiseTracker</title>
+
+	<!-- PromiseTracker cloud icon -->
+	<link rel="icon" href="{% static '../media/img/favicon.ico' %}"/>
+
+	<!-- Bootstrap core CSS -->
+	<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+	<!-- Bootstrap theme -->
+	<link href="{% static 'css/bootstrap-theme.min.css' %}" rel="stylesheet">
+	<!--PromiseTracker custom css changes-->
+	<link href="{% static 'css/css-overwrites.css' %}" rel="stylesheet">
+
+
+	<!-- Custom styles for this template -->
+	<!--theme.css causes problems, so removing for now-->
+	<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+</head>
+
+
+<body class="body" style="background-color:#f6f6f6; padding-top: 65px">
+
+	{% include "navbar.html" %}
+
+	<div class="container theme-showcase" role="main">
+		{% block jumbotron %}
+		{% endblock %}
+
+		{% block bodyblock %}
+		{% endblock %}
+	</div> <!-- /container -->
+
+	{% include "footer.html" %}
+
+</body>
+</html>
