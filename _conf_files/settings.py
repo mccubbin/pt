@@ -43,7 +43,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
 	'promisetracker.com',
-	'www.promisetracker.com'
+	'www.promisetracker.com',
 ]
 #ALLOWED_HOSTS = ['ec2-18-219-179-207.us-east-2.compute.amazonaws.com']
 
