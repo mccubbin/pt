@@ -11,7 +11,7 @@ import os, sys
 
 from django.core.wsgi import get_wsgi_application
 
-sys.path.append("/var/www")
+sys.path.append("/var/www/pt")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "_conf_files.settings")
 
 application = get_wsgi_application()

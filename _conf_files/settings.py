@@ -41,7 +41,10 @@ ENCRKEY = '9mBjx1oW'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['promisetracker.com', 'www.promisetracker.com']
+ALLOWED_HOSTS = [
+	'promisetracker.com',
+	'www.promisetracker.com'
+]
 #ALLOWED_HOSTS = ['ec2-18-219-179-207.us-east-2.compute.amazonaws.com']
 
 
@@ -113,10 +116,10 @@ WSGI_APPLICATION = '_conf_files.wsgi.application'
 
 DATABASES = {
 	'default': {
-		'HOST': 'cromdb.c58wcafefiff.us-east-2.rds.amazonaws.com',
+		'HOST': 'promisetrackerdb.c58wcafefiff.us-east-2.rds.amazonaws.com',
 		'PORT': '5432',
 		'ENGINE': 'django.db.backends.postgresql_psycopg2',
-		'NAME': 'cromdb',
+		'NAME': 'ptdb',
 		'USER': 'pip',
 		'PASSWORD': 'mccub001P',
 	}
@@ -239,3 +242,4 @@ try:
 	from .local_settings import *
 except ImportError:
 	pass
+
