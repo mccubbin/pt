@@ -141,7 +141,7 @@ class PromView(View):
 		send_mail(
 			'PromiseTracker: verify your promise.',
 			promertext,
-			"PromiseTracker<mail@cromise.com>",
+			"PromiseTracker<mail@PromiseTracker.com>",
 			[promerdecrypted],
 			fail_silently=False,
 		)
@@ -152,7 +152,7 @@ class PromView(View):
 		send_mail(
 			'PromiseTracker: someone made a promise to you.',
 			promeetext,
-			"PromiseTracker<mail@cromise.com>",
+			"PromiseTracker<mail@PromiseTracker.com>",
 			[promeedecrypted],
 			fail_silently=False,
 		)
@@ -181,11 +181,9 @@ def promerEmail(promerEncrypt, promeeEmail, promerUrl, request):
 	text = """
 You are making a promise to %s.
 
-Please follow the link below to read the conditions of this promise. Then click to "Approve" or "Deny" this promise.
+Click here to Approve your promise:
 
-Do NOT share this link.
 %s%s
-Do NOT share this link.
 
 After both have approved this promise, use the link above to view the status of your promise.
 
@@ -208,11 +206,9 @@ def promeeEmail(promeeEncrypt, promerEmail, promeeUrl, request):
 	text = """
 %s is making a promise to you.
 
-Please follow the link below to read the conditions of this promise. Then click to "Approve" or "Deny" this promise.
+Click here to Approve this promise:
 
-Do NOT share this link.
 %s%s
-Do NOT share this link.
 
 After both parties have approved this promise, use the link above to mark this promise as "Fulfilled" or "Broken".
 

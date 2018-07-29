@@ -1,3 +1,37 @@
+<style>
+
+	button.home-button {
+		background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
+		display:inline-block;
+		color:#ffffff;
+		margin: 8px 0;
+		padding: 32px 10px;
+		/*background: #ED8400;*/
+
+		/*margin-bottom: 15px;*/
+		/*margin-top: 27px !important;*/
+		/*padding: 20px;*/
+
+		width: 100%;
+		/*text-shadow: 1px 1px 2px transparent;*/
+		box-shadow: inset 0px -3px 2px #734000;
+		border-radius: 14px;
+		/*border-radius: 6px;*/
+
+		font-size: 32px;
+		font-weight: bold;
+		border: none;
+		/*font-size: 26px !important;*/
+		/*line-height: 26px !important;*/
+		/*outline: none !important;*/
+
+		/*font-family: 'Raleway',Helvetica,Arial,Lucida,sans-serif !important;*/
+	}
+	button.home-button:hover {
+		background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+	}
+</style>
+
 {% extends "base.html" %}
 {% load staticfiles %}
 
@@ -16,6 +50,10 @@
 				<br/>
 				<p>No account required.</p>
 			</div>
+			<!--
+			<button class="home-button" role="button">Lookup Promise Record</button>
+			<button class="home-button" role="button">Make Promise to Someone</button>
+			-->
 		</div>
 	</div>
 

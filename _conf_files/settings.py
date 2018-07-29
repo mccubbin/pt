@@ -28,7 +28,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'AKIAJZDAKTCD7YIJDY5A'
 EMAIL_HOST_PASSWORD = 'Ah51PEuRJVxkWvolKXkJkgJmyoXKmiW+JcFpFxlRyFai'
-DEFAULT_FROM_EMAIL = 'PromiseTracker<mail@cromise.com>'
+DEFAULT_FROM_EMAIL = 'PromiseTracker<mail@PromiseTracker.com>'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -39,11 +39,12 @@ SECRET_KEY = '*lu!36_tf=c%gm=pxr@^_gcvs_@f*2hwpp!-5lt%&2-ttptji2'
 ENCRKEY = '9mBjx1oW'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
 	'promisetracker.com',
 	'www.promisetracker.com',
+	'cromise.com',
 ]
 #ALLOWED_HOSTS = ['ec2-18-219-179-207.us-east-2.compute.amazonaws.com']
 
