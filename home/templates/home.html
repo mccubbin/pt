@@ -1,12 +1,17 @@
-<style>
+{% extends "base.html" %}
+{% load staticfiles %}
 
-	button.home-button {
+{% block bodyblock %}
+
+<style>
+	a.home-button {
 		background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
 		display:inline-block;
 		color:#ffffff;
 		margin: 8px 0;
-		padding: 32px 10px;
+		padding: 20px 0;
 		/*background: #ED8400;*/
+		text-align: center;
 
 		/*margin-bottom: 15px;*/
 		/*margin-top: 27px !important;*/
@@ -18,7 +23,7 @@
 		border-radius: 14px;
 		/*border-radius: 6px;*/
 
-		font-size: 32px;
+		font-size: 24px;
 		font-weight: bold;
 		border: none;
 		/*font-size: 26px !important;*/
@@ -27,39 +32,23 @@
 
 		/*font-family: 'Raleway',Helvetica,Arial,Lucida,sans-serif !important;*/
 	}
-	button.home-button:hover {
+	a.home-button:hover {
 		background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+		text-decoration: none;
 	}
 </style>
 
-{% extends "base.html" %}
-{% load staticfiles %}
-
-{% block jumbotron %}
-
-	<!-- Main jumbotron for a primary marketing message or call to action -->
 	<div class='row'>
 		<div class="col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-			<div class="jumbotron" style="padding-top: 15px; padding-bottom: 15px">
-				<h2 style="text-align: center; margin-top: 5px">PromiseTracker</h2>
-				<h3>Make promises online for free.</h3>
-				<p>1. Enter promise and 2 emails</p>
-				<p>2. Check email, both must approve promise</p>
-				<p>3. Mark promise as "Fulfilled" or "Broken"</p>
-				<p>4. <a href="/record">Search by email to view records</a></p>
-				<br/>
-				<p>No account required.</p>
-			</div>
-			<!--
-			<button class="home-button" role="button">Lookup Promise Record</button>
-			<button class="home-button" role="button">Make Promise to Someone</button>
-			-->
+
+			{% include "includes/carousel.html" %}
+
+			<a href="/record" class="home-button">Lookup Promise Record</a>
+			<a href="/make" class="home-button">Make Promise to Someone</a>
+			<a href="/send" class="home-button">Create Promise for Someone Else</a>
 		</div>
 	</div>
 
-{% endblock %}
-
-{% block bodyblock %}
 
 	<!--<div class="container-fluid" style='margin-left:15px'>
 		<div class="col-sm-2">
