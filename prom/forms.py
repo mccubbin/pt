@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.admin import widgets
 #from datetime import datetime
 
-from _funcs.encryption import encrypt, decrypt
+from classes.encryption import Encryption
 from prom.models import blacklist
 
 
@@ -129,7 +129,7 @@ class promeeForm(promiseForm):
 # Check if email has been blacklisted
 #####################################################################
 def isBlacklisted(email):
-        encemail = encrypt(email)
+        encemail = Encryption.encrypt(email)
         Blacklist = blacklist.objects.filter(email=encemail).first()
 
         if Blacklist:

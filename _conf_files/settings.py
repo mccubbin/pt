@@ -44,7 +44,6 @@ DEBUG = False
 ALLOWED_HOSTS = [
 	'promisetracker.com',
 	'www.promisetracker.com',
-	'cromise.com',
 ]
 #ALLOWED_HOSTS = ['ec2-18-219-179-207.us-east-2.compute.amazonaws.com']
 
@@ -164,13 +163,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if DEBUG:
-	MEDIA_URL = '/media/'
-	STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "static-only")
-	MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "media")
-	STATICFILES_DIRS = (
-		os.path.join(os.path.dirname(BASE_DIR), "static", "static"),
-	)
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
@@ -244,3 +236,10 @@ try:
 except ImportError:
 	pass
 
+if DEBUG:
+	MEDIA_URL = '/media/'
+	STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "static-only")
+	MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "media")
+	STATICFILES_DIRS = (
+		os.path.join(os.path.dirname(BASE_DIR), "static", "static"),
+	)

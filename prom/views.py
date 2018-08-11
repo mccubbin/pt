@@ -5,7 +5,7 @@ import base36
 import datetime
 from django.utils import timezone
 
-from _funcs.encryption import encrypt, decrypt
+from classes.encryption import Encryption
 
 from django.db import connection
 from prom.models import promise, blacklist
@@ -74,7 +74,7 @@ class PromView(View):
 
 
 		# check for PROMER email
-		promerencrypted = encrypt(emailpromer)
+		promerencrypted = Encryption.encrypt(emailpromer)
 		Upromer = User.objects.filter(email=promerencrypted).first()
 		if not Upromer:
 			Upromer = User.objects.create(
@@ -85,12 +85,12 @@ class PromView(View):
 				last_name = None,
 				is_active = None,
 			)
-		promerdecrypted = decrypt(Upromer.email)
+		promerdecrypted = Encryption.decrypt(Upromer.email)
 		# print('hello ' + promerdecrypted + '.')
 
 
 		# check for PROMEE email
-		promeeencrypted = encrypt(emailpromee)
+		promeeencrypted = Encryption.encrypt(emailpromee)
 		Upromee = User.objects.filter(email=promeeencrypted).first()
 		if not Upromee:
 			Upromee = User.objects.create(
@@ -101,7 +101,7 @@ class PromView(View):
 				last_name = None,
 				is_active = None,
 			)
-		promeedecrypted = decrypt(Upromee.email)
+		promeedecrypted = Encryption.decrypt(Upromee.email)
 		# print('hello ' + promeedecrypted + '.')
 
 

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
 
-from _funcs.encryption import encrypt, decrypt
+from classes.encryption import Encryption
 
 import base36
 import datetime
@@ -36,7 +36,7 @@ class RecordView(View):
 			#assert False, form
 			return render(request, self.template, params)
 
-		promerencrypted = encrypt(form.cleaned_data['search'])
+		promerencrypted = Encryption.encrypt(form.cleaned_data['search'])
 
 		cursor = connection.cursor()
 		query = '''
