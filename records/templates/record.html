@@ -40,20 +40,33 @@
 			// window.onload = document.getElementById("id_search").click();
 		</script>
 
-
 		{% if rows %}
-			<br/>
-			<div class="panel panel-default">
-				<div class="panel-body" style="padding-top:10px;padding-bottom:10px;">
-					<h4>{{truthful}}% truthful</h4>
-					<h4>{{fulfilled}} fulfilled</h4>
-					<h4>{{broken}} broken</h4>
+			{% if broken or fulfilled or pending %}
+				<br/>
+				<div class="panel panel-default">
+					<div class="panel-body" style="padding-top:10px;padding-bottom:10px;">
+						{% if broken or fulfilled %}
+							<h4>{{truthful}}% truthful</h4>
+							<h4>{{fulfilled}} fulfilled</h4>
+							<h4>{{broken}} broken</h4>
+						{% else %}
+							<h4>No completed promises yet</h4>
+						{% endif %}
+
+						{% if pending %}
+							<h4>({{pending}} pending)</h4>
+						{% endif %}
+					</div>
 				</div>
-			</div>
+			{% endif %}
 
+			{% if public > 0 %}
+				<h3 style="margin-top:25px;margin-bottom:5px;">Public promises</h3>
+				<hr style="height:2px;border:none;color:#333;background-color:#333;margin-top:5px;" />
+			{% else %}
+				<h3 style="margin-top:25px;margin-bottom:5px;">No public promises to display.</h3>
+			{% endif %}
 
-			<h3 style="margin-top:25px;margin-bottom:5px;">Public promises</h3>
-			<hr style="height:2px;border:none;color:#333;background-color:#333;margin-top:5px;" />
 
 			{% for row in rows %}
 				{% if row.1 == "public" %}
@@ -71,7 +84,7 @@
 			{% endfor %}
 
 		{% elif not nosearch %}
-			<h3>No public promises to display.</h3>
+			<h3>This email address has no promise record.</h3>
 		{% endif %}
 
 	</div>

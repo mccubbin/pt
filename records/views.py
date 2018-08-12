@@ -40,7 +40,11 @@ class RecordView(View):
 
 		cursor = connection.cursor()
 		query = '''
-			SELECT promid, privacy, status, cdate, mdate,
+			SELECT promid, privacy,
+				CASE
+					WHEN status = 'draft' THEN 'pending'
+					ELSE status
+				END status, cdate, mdate,
 				CASE
 					WHEN char_length(details) >= 30 THEN
 						left(details, 30) || '...'
@@ -50,7 +54,7 @@ class RecordView(View):
 			FROM promise p
 			JOIN auth_user au ON p.promerid_id = au.id
 			WHERE au.email = %s
-				AND status IN ('broken', 'fulfilled')
+				AND status IN ('broken', 'fulfilled', 'draft')
 			ORDER BY mdate desc;'''
 		cursor.execute(query, [promerencrypted])
 		rows = cursor.fetchall()
@@ -60,18 +64,26 @@ class RecordView(View):
 		broken = 0
 		count = 0
 		truthful = 0
+		pending = 0
+		public = 0
 
 		if rows:
 			for row in rows:
+				if row[1] == 'public':
+					public += 1
+
 				if row[2] == 'fulfilled':
 					fulfilled += 1
 				elif row[2] == 'broken':
 					broken += 1
+				elif row[2] == 'pending':
+					pending += 1
 				count += 1
 
-			truthful = fulfilled / count * 100
-			truthful = round(truthful)
-			#assert False, fulfilled
+			if fulfilled or broken:
+				truthful = fulfilled / (fulfilled + broken) * 100
+				truthful = round(truthful)
+				#assert False, fulfilled
 
 		params = {
 			'form': form,
@@ -80,6 +92,8 @@ class RecordView(View):
 			'truthful': truthful,
 			'fulfilled': fulfilled,
 			'broken': broken,
+			'pending': pending,
+			'public': public,
 		}
 		return render(request, self.template, params)
 
