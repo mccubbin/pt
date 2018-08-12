@@ -38,7 +38,7 @@
 					<a href="{% url 'home' %}">Home</a>
 				</li>
 				<li {% if request.path == '/make/' or request.path == '/send/' %} class="dropdown active" {% else %} class="dropdown" {% endif %}>
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Make promise <span class="caret"></span></a>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Make Promise <span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li>
 							<a href="/make">I am making a promise to someone</a>
@@ -49,7 +49,18 @@
 					</ul>
 				</li>
 				<li {% if request.path == '/record/' %} class="active" {% endif %}>
-					<a href="{% url 'record' %}">Record lookup</a>
+					<a href="{% url 'record' %}">Record Lookup</a>
+				</li>
+				<li {% if request.path == '/erase/' or request.path == '/changeprivacy/' %} class="dropdown active" {% else %} class="dropdown" {% endif %}>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Data <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="/erase">Erase my entire promise record</a>
+						</li>
+						<li>
+							<a href="/changeprivacy">Change privacy label for my promises</a>
+						</li>
+					</ul>
 				</li>
 			</ul>
 		</div><!--/.nav-collapse -->
