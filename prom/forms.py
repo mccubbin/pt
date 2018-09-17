@@ -102,7 +102,7 @@ class promerForm(promiseForm):
 class promeeForm(promiseForm):
 
 	PROMISETEXT = (
-		'I, [name of promiser], promise to pay Kevin '
+		'I, [name of promisor], promise to pay Kevin '
 		'the money I owe him by this Saturday.'
 	)
 
@@ -112,7 +112,7 @@ class promeeForm(promiseForm):
 	)
 	emailpromer = forms.EmailField(
 		required=True,
-		label="Promiser email",
+		label="Promisor email",
 	)
 	details = forms.CharField(
 		required=True,

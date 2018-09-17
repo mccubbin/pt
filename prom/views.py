@@ -22,14 +22,14 @@ class PromView(View):
 
 	def get(self, request, who):
 
-		who = ("promiser", "promisee")[who == 'send']
-		if who == 'promiser':
+		who = ("promisor", "promisee")[who == 'send']
+		if who == 'promisor':
 			form = promerForm()
 			title = 'Make promise'
 			btnvalue = 'Make promise'
 		else:
 			form = promeeForm()
-			title = 'Send to promiser for approval'
+			title = 'Send to promisor for approval'
 			btnvalue = 'Submit promise'
 		#assert False, who
 
@@ -38,8 +38,8 @@ class PromView(View):
 
 
 	def post(self, request, who):
-		who = ("promiser", "promisee")[who == 'send']
-		if who == 'promiser':
+		who = ("promisor", "promisee")[who == 'send']
+		if who == 'promisor':
 			form = promerForm(request.POST)
 			title = "Congratulations.\nAccountability improves quality of life!"
 			promiseintro = "Your promise is"
@@ -48,16 +48,16 @@ class PromView(View):
 			form = promeeForm(request.POST)
 			title = 'Promise sent for approval'
 			promiseintro = "You submitted this promise"
-			other = "promiser"
+			other = "promisor"
 		#assert False, request
 
 		# if error, rebuilt title, buttons according to who
 		if not form.is_valid():
-			if who == 'promiser':
+			if who == 'promisor':
 				title = 'Make promise'
 				btnvalue = 'Make promise'
 			else:
-				title = 'Send to promiser for approval'
+				title = 'Send to promisor for approval'
 				btnvalue = 'Submit promise'
 
 			params = {
@@ -135,7 +135,7 @@ class PromView(View):
 		# #################################################################
 
 		# #################################################################
-		# PROMISER SEND MAIL
+		# PROMISOR SEND MAIL
 		promertext = promerEmail(promerencrypted, promeedecrypted, promerurl, request)
 		#assert False, request
 		send_mail(
@@ -271,12 +271,12 @@ def manage(request, promid, uid, encemail):
 		return redirect('/404/error/')
 
 
-	# Who is this? the promiser, or promisee?
+	# Who is this? the promisor, or promisee?
 	if (uid == idpromer) and (encemail == empromer):
-		promiser = True
+		promisor = True
 		promisee = False
 	elif (uid == idpromee) and (encemail == empromee):
-		promiser = False
+		promisor = False
 		promisee = True
 	else:
 		return redirect('/404/error/')
@@ -299,7 +299,7 @@ def manage(request, promid, uid, encemail):
 				status = 'delete'
 			)
 
-		elif promiser and do == 'approve' and promerapprdate == None:
+		elif promisor and do == 'approve' and promerapprdate == None:
 			if promeeapprdate:
 				status = 'pending'
 			else:
@@ -355,11 +355,11 @@ def manage(request, promid, uid, encemail):
 		# DELETE promise from database
 		promise.objects.filter(promid=promid).delete()
 		message += 'Promise does not exist anymore.'
-	elif promiser:
+	elif promisor:
 		if status == 'draft' and promerapprdate is None:
 			message += ('Promise not active. Click to approve this promise.\n'
 				'You can also delete this promise.')
-			# button for promiser to approve
+			# button for promisor to approve
 			buttontype = 'approve'
 		elif status == 'draft' and promeeapprdate is None:
 			message += ('Promise not active. Promisee '
@@ -381,7 +381,7 @@ def manage(request, promid, uid, encemail):
 			# button for promisee to approve
 			buttontype = 'approve'
 		elif status == 'draft' and promerapprdate is None:
-			message += ('Promise not active. Promiser has not yet approved.')
+			message += ('Promise not active. Promisor has not yet approved.')
 			# refresh button
 			buttontype = 'refresh'
 		elif status == 'pending':
