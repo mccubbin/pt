@@ -3,43 +3,42 @@
 
 {% block bodyblock %}
 
-<style>
-	a.home-button {
-		background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
-		display:inline-block;
-		color:#ffffff;
-		margin: 8px 0;
-		padding: 20px 0;
-		/*background: #ED8400;*/
-		text-align: center;
-
-		/*margin-bottom: 15px;*/
-		/*margin-top: 27px !important;*/
-		/*padding: 20px;*/
-
-		width: 100%;
-		/*text-shadow: 1px 1px 2px transparent;*/
-		box-shadow: inset 0px -3px 2px #734000;
-		border-radius: 14px;
-		/*border-radius: 6px;*/
-
-		font-size: 24px;
-		font-weight: bold;
-		border: none;
-		/*font-size: 26px !important;*/
-		/*line-height: 26px !important;*/
-		/*outline: none !important;*/
-
-		/*font-family: 'Raleway',Helvetica,Arial,Lucida,sans-serif !important;*/
-	}
-	a.home-button:hover {
-		background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
-		text-decoration: none;
-	}
-</style>
+	<style>
+		@media (max-width: 1500px) {
+			div.alert.alert-info {
+				display: none
+			}
+		}
+		a.home-button {
+			background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
+			display:inline-block;
+			color:#ffffff;
+			margin: 8px 0;
+			padding: 20px 0;
+			text-align: center;
+			width: 100%;
+			/*text-shadow: 1px 1px 2px transparent;*/
+			box-shadow: inset 0px -3px 2px #734000;
+			border-radius: 14px;
+			/*border-radius: 6px;*/
+			font-size: 24px;
+			font-weight: bold;
+			border: none;
+			/*font-family: 'Raleway',Helvetica,Arial,Lucida,sans-serif !important;*/
+		}
+		a.home-button:hover {
+			background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+			text-decoration: none;
+		}
+	</style>
 
 	<div class='row'>
 		<div class="col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+
+			<div class="alert alert-info">
+				PromiseTracker tracks promises by keeping a permanent record online. If a promise is not kept, mark it "Broken".
+				Finally, the internet has a social accountability tool!
+			</div>
 
 			{% include "includes/carousel.html" %}
 
