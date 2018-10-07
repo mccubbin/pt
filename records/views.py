@@ -36,7 +36,7 @@ class RecordView(View):
 			#assert False, form
 			return render(request, self.template, params)
 
-		promerencrypted = Encryption.encrypt(form.cleaned_data['search'])
+		promorencrypted = Encryption.encrypt(form.cleaned_data['search'])
 
 		cursor = connection.cursor()
 		query = '''
@@ -52,11 +52,11 @@ class RecordView(View):
 						details
 				END details
 			FROM promise p
-			JOIN auth_user au ON p.promerid_id = au.id
+			JOIN auth_user au ON p.promorid_id = au.id
 			WHERE au.email = %s
 				AND status IN ('broken', 'fulfilled', 'draft')
 			ORDER BY mdate desc;'''
-		cursor.execute(query, [promerencrypted])
+		cursor.execute(query, [promorencrypted])
 		rows = cursor.fetchall()
 
 		# mine data for stats

@@ -36,10 +36,10 @@ class Migration(migrations.Migration):
                 ('privacy', models.CharField(choices=[('private', 'Private'), ('public', 'Public')], default='private', max_length=20)),
                 ('details', models.CharField(max_length=2000)),
                 ('compdate', models.DateTimeField(blank=True, null=True)),
-                ('promerapprdate', models.DateTimeField(blank=True, null=True)),
+                ('promorapprdate', models.DateTimeField(blank=True, null=True)),
                 ('promeeapprdate', models.DateTimeField(blank=True, null=True)),
                 ('promeeid', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='promeeid', to=settings.AUTH_USER_MODEL)),
-                ('promerid', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='promerid', to=settings.AUTH_USER_MODEL)),
+                ('promorid', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='promorid', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'db_table': 'promise',

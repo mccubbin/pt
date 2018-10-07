@@ -9,7 +9,7 @@ from prom.models import blacklist
 
 class promiseForm(forms.Form):
 
-	emailpromer = forms.EmailField(
+	emailpromor = forms.EmailField(
 		required=True,
 		label="Your email",
 		# widget=forms.TextInput(attrs={'size':10, 'max_length':20}),
@@ -46,32 +46,32 @@ class promiseForm(forms.Form):
 
 	def clean(self):
 		cleaned_data = super(promiseForm, self).clean()
-		emailpromer = cleaned_data.get('emailpromer')
+		emailpromor = cleaned_data.get('emailpromor')
 		emailpromee = cleaned_data.get('emailpromee')
 
-		if emailpromer == None or emailpromee == None:
+		if emailpromor == None or emailpromee == None:
 			raise forms.ValidationError('Email addresses must be valid.')
 
-		emailpromer = emailpromer.lower()
+		emailpromor = emailpromor.lower()
 		emailpromee = emailpromee.lower()
 
-		if emailpromer and emailpromee and (emailpromer == emailpromee):
+		if emailpromor and emailpromee and (emailpromor == emailpromee):
 			#self._errors['emailpromee'] = self.error_class(['Emails cannot be the same.'])
 			#del self.cleaned_data['emailpromee']
 			raise forms.ValidationError('Emails must be different.')
 
-		if isBlacklisted(emailpromer):
-			raise forms.ValidationError(emailpromer + ' is blacklisted.')
+		if isBlacklisted(emailpromor):
+			raise forms.ValidationError(emailpromor + ' is blacklisted.')
 		if isBlacklisted(emailpromee):
 			raise forms.ValidationError(emailpromee + ' is blacklisted.')
 
 		# LOWERCASE email addresses before going back to view
-		cleaned_data["emailpromer"] = emailpromer
+		cleaned_data["emailpromor"] = emailpromor
 		cleaned_data["emailpromee"] = emailpromee
 
 		return cleaned_data
 
-class promerForm(promiseForm):
+class promorForm(promiseForm):
 
 	PROMISETEXT = (
 		'I, [your name], promise to go to brunch this Saturday '
@@ -79,7 +79,7 @@ class promerForm(promiseForm):
 		'(even though I really don\'t want to go)'
 	)
 
-	emailpromer = forms.EmailField(
+	emailpromor = forms.EmailField(
 		required=True,
 		label="Your email",
 		# widget=forms.TextInput(attrs={'size':10, 'max_length':20}),
@@ -110,7 +110,7 @@ class promeeForm(promiseForm):
 		required=True,
 		label="Your email",
 	)
-	emailpromer = forms.EmailField(
+	emailpromor = forms.EmailField(
 		required=True,
 		label="Promisor email",
 	)

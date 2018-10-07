@@ -11,7 +11,7 @@ from django.db import connection
 from prom.models import promise, blacklist
 from django.contrib.auth.models import User
 
-from .forms import promerForm, promeeForm
+from .forms import promorForm, promeeForm
 
 from django.core.validators import validate_email
 from django.core.mail import send_mail
@@ -24,7 +24,7 @@ class PromView(View):
 
 		who = ("promisor", "promisee")[who == 'send']
 		if who == 'promisor':
-			form = promerForm()
+			form = promorForm()
 			title = 'Make promise'
 			btnvalue = 'Make promise'
 		else:
@@ -40,7 +40,7 @@ class PromView(View):
 	def post(self, request, who):
 		who = ("promisor", "promisee")[who == 'send']
 		if who == 'promisor':
-			form = promerForm(request.POST)
+			form = promorForm(request.POST)
 			title = "Congratulations.\nAccountability improves quality of life!"
 			promiseintro = "Your promise is"
 			other = "recipient"
@@ -67,26 +67,26 @@ class PromView(View):
 			}
 			return render(request, self.template, params)
 
-		emailpromer = form.cleaned_data['emailpromer']
+		emailpromor = form.cleaned_data['emailpromor']
 		emailpromee = form.cleaned_data['emailpromee']
 		details = form.cleaned_data['details']
 		privacy = ('private', 'public')[form.cleaned_data['public']]
 
 
-		# check for PROMER email
-		promerencrypted = Encryption.encrypt(emailpromer)
-		Upromer = User.objects.filter(email=promerencrypted).first()
-		if not Upromer:
-			Upromer = User.objects.create(
-				email = promerencrypted,
+		# check for PROMOR email
+		promorencrypted = Encryption.encrypt(emailpromor)
+		Upromor = User.objects.filter(email=promorencrypted).first()
+		if not Upromor:
+			Upromor = User.objects.create(
+				email = promorencrypted,
 				password = None,
 				username = None,
 				first_name = None,
 				last_name = None,
 				is_active = None,
 			)
-		promerdecrypted = Encryption.decrypt(Upromer.email)
-		# print('hello ' + promerdecrypted + '.')
+		promordecrypted = Encryption.decrypt(Upromor.email)
+		# print('hello ' + promordecrypted + '.')
 
 
 		# check for PROMEE email
@@ -110,7 +110,7 @@ class PromView(View):
 			status = 'draft',
 			privacy = privacy,
 			details = details,
-			promerid = User.objects.get(id=Upromer.id),
+			promorid = User.objects.get(id=Upromor.id),
 			promeeid = User.objects.get(id=Upromee.id),
 		)
 
@@ -121,9 +121,9 @@ class PromView(View):
 		# #################################################################
 		promid = base36.dumps(prom.promid)
 
-		# promerurl
-		promerid = base36.dumps(Upromer.id)
-		promerurl = '/crm/' + promid + '/' + promerid + '/' + Upromer.email
+		# promorurl
+		promorid = base36.dumps(Upromor.id)
+		promorurl = '/crm/' + promid + '/' + promorid + '/' + Upromor.email
 
 		# promeeurl
 		promeeid = base36.dumps(Upromee.id)
@@ -136,19 +136,19 @@ class PromView(View):
 
 		# #################################################################
 		# PROMISOR SEND MAIL
-		promertext = promerEmail(promerencrypted, promeedecrypted, promerurl, request)
+		promortext = promoremail(promorencrypted, promeedecrypted, promorurl, request)
 		#assert False, request
 		send_mail(
 			'PromiseTracker: verify your promise.',
-			promertext,
+			promortext,
 			"PromiseTracker<mail@PromiseTracker.com>",
-			[promerdecrypted],
+			[promordecrypted],
 			fail_silently=False,
 		)
 
 		# #################################################################
 		# PROMISEE SEND MAIL
-		promeetext = promeeEmail(promeeencrypted, promerdecrypted, promeeurl, request)
+		promeetext = promeeEmail(promeeencrypted, promordecrypted, promeeurl, request)
 		send_mail(
 			'PromiseTracker: someone made a promise to you.',
 			promeetext,
@@ -170,13 +170,13 @@ class PromView(View):
 			'message': message,
 			'promiseintro': promiseintro,
 			'promise': details,
-			'promerurl': promerurl,
+			'promorurl': promorurl,
 			'promeeurl': promeeurl,
 		}
 		return render(request, self.template, params)
 
 
-def promerEmail(promerEncrypt, promeeEmail, promerUrl, request):
+def promoremail(promorEncrypt, promeeEmail, promorurl, request):
 	host = request.get_host()
 	text = """
 You are making a promise to %s.
@@ -196,12 +196,12 @@ PromiseTracker
 To never receive another email from PromiseTracker.com, click here:
 %s/bl/%s
 
-""" % (promeeEmail, host, promerUrl, host, promerEncrypt)
+""" % (promeeEmail, host, promorurl, host, promorEncrypt)
 
 	return text
 
 
-def promeeEmail(promeeEncrypt, promerEmail, promeeUrl, request):
+def promeeEmail(promeeEncrypt, promoremail, promeeUrl, request):
 	host = request.get_host()
 	text = """
 %s is making a promise to you.
@@ -221,7 +221,7 @@ PromiseTracker
 To never receive another email from PromiseTracker.com, click here:
 %s/bl/%s
 
-""" % (promerEmail, host, promeeUrl, host, promeeEncrypt)
+""" % (promoremail, host, promeeUrl, host, promeeEncrypt)
 	return text
 
 
@@ -237,9 +237,9 @@ def manage(request, promid, uid, encemail):
 	cursor = connection.cursor()
 	query = '''
 		SELECT
-			promerid_id,
-			au1.email promeremail,
-			promerapprdate,
+			promorid_id,
+			au1.email promoremail,
+			promorapprdate,
 			promeeid_id,
 			au2.email promeeemail,
 			promeeapprdate,
@@ -249,16 +249,16 @@ def manage(request, promid, uid, encemail):
 			cdate,
 			mdate
 		FROM promise p
-		JOIN auth_user au1 ON p.promerid_id = au1.id
+		JOIN auth_user au1 ON p.promorid_id = au1.id
 		JOIN auth_user au2 ON p.promeeid_id = au2.id
 		WHERE p.promid = %s'''
 	cursor.execute(query, [promid])
 	row = cursor.fetchone()
 
 	if row:
-		(	idpromer,
-			empromer,
-			promerapprdate,
+		(	idpromor,
+			empromor,
+			promorapprdate,
 			idpromee,
 			empromee,
 			promeeapprdate,
@@ -272,7 +272,7 @@ def manage(request, promid, uid, encemail):
 
 
 	# Who is this? the promisor, or promisee?
-	if (uid == idpromer) and (encemail == empromer):
+	if (uid == idpromor) and (encemail == empromor):
 		promisor = True
 		promisee = False
 	elif (uid == idpromee) and (encemail == empromee):
@@ -299,30 +299,30 @@ def manage(request, promid, uid, encemail):
 				status = 'delete'
 			)
 
-		elif promisor and do == 'approve' and promerapprdate == None:
+		elif promisor and do == 'approve' and promorapprdate == None:
 			if promeeapprdate:
 				status = 'pending'
 			else:
 				status = 'draft'
 
-			#set database promerapprdate to now
+			#set database promorapprdate to now
 			#update mdate too
-			#promerapprdate to now
+			#promorapprdate to now
 
 			current = timezone.now()
 			promise.objects.filter(promid=promid).update(
-				promerapprdate = current,
+				promorapprdate = current,
 				mdate = current,
 				status = status
 			)
-			promerapprdate = current
+			promorapprdate = current
 
 		elif promisee and do == 'approve' and promeeapprdate == None:
-			if promerapprdate:
+			if promorapprdate:
 				status = 'pending'
 			else:
 				status = 'draft'
-			#if promerapprdate change status
+			#if promorapprdate change status
 			#set database promeeapprdate to now
 			#promeeapprdate to now
 			current = timezone.now()
@@ -356,7 +356,7 @@ def manage(request, promid, uid, encemail):
 		promise.objects.filter(promid=promid).delete()
 		message += 'Promise does not exist anymore.'
 	elif promisor:
-		if status == 'draft' and promerapprdate is None:
+		if status == 'draft' and promorapprdate is None:
 			message += ('Promise not active. Click to approve this promise.\n'
 				'You can also delete this promise.')
 			# button for promisor to approve
@@ -380,7 +380,7 @@ def manage(request, promid, uid, encemail):
 				'You can also delete this promise.')
 			# button for promisee to approve
 			buttontype = 'approve'
-		elif status == 'draft' and promerapprdate is None:
+		elif status == 'draft' and promorapprdate is None:
 			message += ('Promise not active. Promisor has not yet approved.')
 			# refresh button
 			buttontype = 'refresh'
@@ -418,9 +418,9 @@ def public(request, promid):
 	cursor = connection.cursor()
 	query = '''
 		SELECT
-			promerid_id,
-			au1.email promeremail,
-			promerapprdate,
+			promorid_id,
+			au1.email promoremail,
+			promorapprdate,
 			promeeid_id,
 			au2.email promeeemail,
 			promeeapprdate,
@@ -430,16 +430,16 @@ def public(request, promid):
 			cdate,
 			mdate
 		FROM promise p
-		JOIN auth_user au1 ON p.promerid_id = au1.id
+		JOIN auth_user au1 ON p.promorid_id = au1.id
 		JOIN auth_user au2 ON p.promeeid_id = au2.id
 		WHERE p.privacy = 'public' AND p.promid = %s'''
 	cursor.execute(query, [promid])
 	row = cursor.fetchone()
 
 	if row:
-		(	idpromer,
-			empromer,
-			promerapprdate,
+		(	idpromor,
+			empromor,
+			promorapprdate,
 			idpromee,
 			empromee,
 			promeeapprdate,

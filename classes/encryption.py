@@ -39,6 +39,6 @@ class Encryption:
 		return text
 
 
-#promerencoded = base64.urlsafe_b64encode(emailpromer.encode())
-#Upromer.email = Upromer.email.decode('utf-8')
+#promorencoded = base64.urlsafe_b64encode(emailpromor.encode())
+#Upromor.email = Upromor.email.decode('utf-8')
 

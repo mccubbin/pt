@@ -22,8 +22,8 @@ class promise(models.Model):
 	privacy = models.CharField(choices=PRIVACY_CHOICES, max_length=20, default='private')
 	details = models.CharField(max_length=2000)
 	compdate = models.DateTimeField(null=True, blank=True)
-	promerid = models.ForeignKey(User, on_delete=models.PROTECT, related_name='promerid', null=True, blank=True)
-	promerapprdate = models.DateTimeField(null=True, blank=True)
+	promorid = models.ForeignKey(User, on_delete=models.PROTECT, related_name='promorid', null=True, blank=True)
+	promorapprdate = models.DateTimeField(null=True, blank=True)
 	promeeid = models.ForeignKey(User, on_delete=models.PROTECT, related_name='promeeid', null=True, blank=True)
 	promeeapprdate = models.DateTimeField(null=True, blank=True)
 
