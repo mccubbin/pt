@@ -57,7 +57,7 @@ urlpatterns = [
 		promviews.PromView.as_view(),
 	),
 	url(
-		r'^crm/',
+		r'^prm/',
 		include('prom.urls')
 	),
 	url(

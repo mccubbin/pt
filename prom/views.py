@@ -123,11 +123,11 @@ class PromView(View):
 
 		# promorurl
 		promorid = base36.dumps(Upromor.id)
-		promorurl = '/crm/' + promid + '/' + promorid + '/' + Upromor.email
+		promorurl = '/prm/' + promid + '/' + promorid + '/' + Upromor.email
 
 		# promeeurl
 		promeeid = base36.dumps(Upromee.id)
-		promeeurl = '/crm/' + promid + '/' + promeeid + '/' + Upromee.email
+		promeeurl = '/prm/' + promid + '/' + promeeid + '/' + Upromee.email
 
 
 		# #################################################################

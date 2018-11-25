@@ -70,14 +70,14 @@
 
 			{% for row in rows %}
 				{% if row.1 == "public" %}
-					<a href = "/crm/{{row.0|encode36}}/" style="text-decoration:none;color: black;">
+					<a href = "/prm/{{row.0|encode36}}/" style="text-decoration:none;color: black;">
 						<div class="well" style="margin-bottom:15px;padding-bottom:5px;padding-top:5px;">
 							<h4>Status: {{ row.2 }}</h4>
 							<p>Created: {{ row.3|timesince:current }} ago</p>
 							<p>Completed: {{ row.3|timesince:current }} ago</p>
 							<p>Details: {{ row.5 }}</p>
 							<!-- {{ row.date|date:"Y-m-d" }}
-							<a href="/crm/{{row.promid}}"> {{row.details}}</a>-->
+							<a href="/prm/{{row.promid}}"> {{row.details}}</a>-->
 						</div>
 					</a>
 				{% endif %}
