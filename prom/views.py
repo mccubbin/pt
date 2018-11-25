@@ -267,6 +267,7 @@ def manage(request, promid, uid, encemail):
 			details,
 			cdate,
 			mdate) = row
+		cdateUtc = cdate.isoformat()
 	else:
 		return redirect('/404/error/')
 
@@ -349,6 +350,7 @@ def manage(request, promid, uid, encemail):
 
 	title = 'Manage promise'
 	message = ''
+	mdateUtc = mdate.isoformat()
 	buttontype = None
 
 	if status == 'delete':
@@ -372,8 +374,8 @@ def manage(request, promid, uid, encemail):
 			# refresh button
 			buttontype = 'refresh'
 		elif status == 'broken' or status == 'fulfilled':
-			message += ('This promise was marked as ' + status.capitalize() +
-				' on ' + mdate.strftime('%H:%M%p %Z, %b %d, %Y') + '.')
+			message += ('This promise was marked as "' + status.capitalize() +
+						'" on <span data-utc="' + mdateUtc + '" class="localtime"></span>.')
 	elif promisee:
 		if status == 'draft' and promeeapprdate is None:
 			message += ('Promise not active. Click to approve this promise.\n'
@@ -390,8 +392,9 @@ def manage(request, promid, uid, encemail):
 			# BUTTONS for Promise broken, or Promise fulfilled
 			buttontype = 'complete'
 		elif status == 'broken' or status == 'fulfilled':
-			message += ('You marked this promise as ' + status.capitalize() +
-				' on ' + mdate.strftime('%H:%M%p %Z, %b %d, %Y') + '.')
+			#mdateUtc = "2008-09-15T15:53:00+01:00"
+			message = ('You marked this promise as "' + status.capitalize() +
+						'" on <span data-utc="' + mdateUtc + '" class="localtime"></span>.')
 
 	#assert False, message
 
@@ -399,7 +402,7 @@ def manage(request, promid, uid, encemail):
 		'promid': promid,
 		'status': status.capitalize(),
 		'details': details,
-		'cdate': cdate,
+		'cdateUtc': cdateUtc,
 		'title': title,
 		'message': message,
 		'buttontype': buttontype,

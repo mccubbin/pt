@@ -3,18 +3,18 @@
 {% load record_tags %}
 
 {% block bodyblock %}
+
 <div class='row'>
 	<div class="col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
 		<h2>{{title}}</h2>
 		<div class="well" style="margin-bottom:0px;padding-bottom:5px;padding-top:5px;">
 			<h4>Status: {{ status }}</h4>
-			<p>Created: {{ cdate }}</p>
+			<p>Created: <span data-utc="{{cdateUtc}}" class="localtime"></span></p>
 			<p>Details: {{ details }}</p>
 			<!-- <p>{{ promid }}</p> -->
 		</div>
 
-		<p>{{ message|linebreaks }}</p>
-
+		<p>{{ message|safe|linebreaks }}</p>
 
 		{% if buttontype == 'approve' %}
 			<form method='POST' action=''> {% csrf_token %}
@@ -39,5 +39,10 @@
 
 	</div>
 </div>
+
+<script type="text/javascript">
+	displayLocalTimeInSpan();
+</script>
+
 {% endblock %}
 
