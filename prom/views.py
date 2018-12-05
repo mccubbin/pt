@@ -267,7 +267,6 @@ def manage(request, promid, uid, encemail):
 			details,
 			cdate,
 			mdate) = row
-		cdateUtc = cdate.isoformat()
 	else:
 		return redirect('/404/error/')
 
@@ -350,7 +349,7 @@ def manage(request, promid, uid, encemail):
 
 	title = 'Manage promise'
 	message = ''
-	mdateUtc = mdate.isoformat()
+	#mdate = mdate.isoformat()
 	buttontype = None
 
 	if status == 'delete':
@@ -364,8 +363,7 @@ def manage(request, promid, uid, encemail):
 			# button for promisor to approve
 			buttontype = 'approve'
 		elif status == 'draft' and promeeapprdate is None:
-			message += ('Promise not active. Promisee '
-				'has not yet approved.')
+			message += ('Promise not active. Promisee has not yet approved.')
 			# refresh button
 			buttontype = 'refresh'
 		elif status == 'pending':
@@ -374,8 +372,8 @@ def manage(request, promid, uid, encemail):
 			# refresh button
 			buttontype = 'refresh'
 		elif status == 'broken' or status == 'fulfilled':
-			message += ('This promise was marked as "' + status.capitalize() +
-						'" on <span data-utc="' + mdateUtc + '" class="localtime"></span>.')
+			message += ('This promise was marked as "' + status.capitalize() + '" ' + onOrAt(mdate) +
+						' <span data-utc="' + str(mdate) + '" class="localtime"></span>.')
 	elif promisee:
 		if status == 'draft' and promeeapprdate is None:
 			message += ('Promise not active. Click to approve this promise.\n'
@@ -392,9 +390,9 @@ def manage(request, promid, uid, encemail):
 			# BUTTONS for Promise broken, or Promise fulfilled
 			buttontype = 'complete'
 		elif status == 'broken' or status == 'fulfilled':
-			#mdateUtc = "2008-09-15T15:53:00+01:00"
-			message = ('You marked this promise as "' + status.capitalize() +
-						'" on <span data-utc="' + mdateUtc + '" class="localtime"></span>.')
+			#mdate = "2008-09-15T15:53:00+01:00"
+			message = ('You marked this promise as "' + status.capitalize() + '" ' + onOrAt(mdate) +
+						' <span data-utc="' + str(mdate) + '" class="localtime"></span>.')
 
 	#assert False, message
 
@@ -402,7 +400,7 @@ def manage(request, promid, uid, encemail):
 		'promid': promid,
 		'status': status.capitalize(),
 		'details': details,
-		'cdateUtc': cdateUtc,
+		'cdate': cdate,
 		'title': title,
 		'message': message,
 		'buttontype': buttontype,
@@ -458,10 +456,10 @@ def public(request, promid):
 		'status': status,
 		'details': details,
 		'privacy': privacy,
-		'promid': promid,
 		'current': timezone.now(),
 		'cdate': cdate,
 		'mdate': mdate,
+		#'promid': promid,
 	}
 
 	template = 'public.html'
@@ -518,3 +516,15 @@ def blacklistEmail(request, encemail):
 
 
 
+#
+# For displaying a date or time: if within 24 hours, return "at"; otherwise "on"
+#
+def onOrAt(past_date):
+	import pytz
+	now = datetime.datetime.now(pytz.utc)
+	difference = now - past_date
+
+	# if date less than 24 hours, return "at"; otherwise return "on"
+	if difference.days == 0:
+		return "at"
+	return "on"

@@ -154,7 +154,11 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+# set to false so we can set custom DATETIME_FORMAT
+USE_L10N = False
+
+# make all datetime formats ISO 8601
+DATETIME_FORMAT = 'c'
 
 USE_TZ = True
 

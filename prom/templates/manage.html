@@ -9,7 +9,7 @@
 		<h2>{{title}}</h2>
 		<div class="well" style="margin-bottom:0px;padding-bottom:5px;padding-top:5px;">
 			<h4>Status: {{ status }}</h4>
-			<p>Created: <span data-utc="{{cdateUtc}}" class="localtime"></span></p>
+			<p>Created: <span data-utc="{{cdate}}" class="localtime"></span></p>
 			<p>Details: {{ details }}</p>
 			<!-- <p>{{ promid }}</p> -->
 		</div>
@@ -40,6 +40,7 @@
 	</div>
 </div>
 
+<!-- grabs iso8601 date from data attr, formats it, puts in span tags. Must be placed after code, not before -->
 <script type="text/javascript">
 	displayLocalTimeInSpan();
 </script>

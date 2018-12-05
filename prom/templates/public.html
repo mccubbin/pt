@@ -8,10 +8,10 @@
 
 		<div class="well" style="margin-bottom:0px;padding-bottom:5px;padding-top:5px;">
 
-			<h4>Status: {{ status }}</h4>
-			<p>Privacy: {{ privacy }}</p>
-			<p>Created: {{ cdate|timesince:current }} ago</p>
-			<p>Completed: {{ mdate|timesince:current }} ago</p>
+			<h4>Status: {{ status|capfirst  }}</h4>
+			<p>Privacy: {{ privacy|capfirst  }}</p>
+			<p>Created: <span data-utc="{{cdate}}" class="localtime"></span></p>
+			<p>Completed: <span data-utc="{{mdate}}" class="localtime"></span></p>
 			<p>Details: {{ details }}</p>
 			<!-- <p>{{ promid }}</p> -->
 
@@ -19,6 +19,11 @@
 
 	</div>
 </div>
+
+<!-- grabs iso8601 date from data attr, formats it, puts in span tags. Must be placed after code, not before -->
+<script type="text/javascript">
+	displayLocalTimeInSpan();
+</script>
 
 {% endblock %}
 
