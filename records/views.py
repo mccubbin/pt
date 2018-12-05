@@ -1,3 +1,4 @@
+from __future__ import division
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
@@ -82,7 +83,7 @@ class RecordView(View):
 
 			if fulfilled or broken:
 				truthful = fulfilled / (fulfilled + broken) * 100
-				truthful = round(truthful)
+				truthful = int(round(truthful))
 				#assert False, fulfilled
 
 		params = {
