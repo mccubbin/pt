@@ -26,6 +26,9 @@ class RecordView(View):
 		return render(request, self.template, params)
 
 	def post(self, request):
+		convertEmails()
+		exit()
+
 		form = searchForm(request.POST)
 		#assert False, request
 
@@ -98,3 +101,21 @@ class RecordView(View):
 		}
 		return render(request, self.template, params)
 
+def convertEmails():
+	string = ''
+	cursor = connection.cursor()
+	query = '''
+		SELECT distinct email
+		FROM auth_user
+		WHERE email not like '%@%';'''
+	cursor.execute(query)
+	rows = cursor.fetchall()
+
+	for row in rows:
+		emailDecrypted = Encryption.decrypt(row[0])
+		query = '''
+			UPDATE auth_user
+			SET email = %s
+			WHERE email = %s;'''
+
+		cursor.execute(query, [emailDecrypted, row[0]])
