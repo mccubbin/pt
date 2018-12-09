@@ -67,41 +67,43 @@ class PromView(View):
 			}
 			return render(request, self.template, params)
 
-		emailpromor = form.cleaned_data['emailpromor']
-		emailpromee = form.cleaned_data['emailpromee']
+		promorEmail = form.cleaned_data['emailpromor']
+		promeeEmail = form.cleaned_data['emailpromee']
 		details = form.cleaned_data['details']
 		privacy = ('private', 'public')[form.cleaned_data['public']]
 
 
 		# check for PROMOR email
-		promorencrypted = Encryption.encrypt(emailpromor)
-		Upromor = User.objects.filter(email=promorencrypted).first()
+		Upromor = User.objects.filter(email=promorEmail).first()
+
+		# if not a user, create one
 		if not Upromor:
 			Upromor = User.objects.create(
-				email = promorencrypted,
+				email = promorEmail,
 				password = None,
 				username = None,
 				first_name = None,
 				last_name = None,
 				is_active = None,
 			)
-		promordecrypted = Encryption.decrypt(Upromor.email)
+		# promordecrypted = Encryption.decrypt(Upromor.email)
 		# print('hello ' + promordecrypted + '.')
 
 
 		# check for PROMEE email
-		promeeencrypted = Encryption.encrypt(emailpromee)
-		Upromee = User.objects.filter(email=promeeencrypted).first()
+		Upromee = User.objects.filter(email=promeeEmail).first()
+
+		# if not a user, create one
 		if not Upromee:
 			Upromee = User.objects.create(
-				email = promeeencrypted,
+				email = promeeEmail,
 				password = None,
 				username = None,
 				first_name = None,
 				last_name = None,
 				is_active = None,
 			)
-		promeedecrypted = Encryption.decrypt(Upromee.email)
+		# promeedecrypted = Encryption.decrypt(Upromee.email)
 		# print('hello ' + promeedecrypted + '.')
 
 
@@ -115,19 +117,28 @@ class PromView(View):
 		)
 
 
+		# #################################################################
+		# Encrypt email addresses for links
+		# #################################################################
+		# Promisor
+		promorEmailEncrypt = Encryption.encrypt(promorEmail)
+
+		# Promisee
+		promeeEmailEncrypt = Encryption.encrypt(promeeEmail)
+
 
 		# #################################################################
 		# MAKE URLS
 		# #################################################################
 		promid = base36.dumps(prom.promid)
 
-		# promorurl
+		# promor url
 		promorid = base36.dumps(Upromor.id)
-		promorurl = '/prm/' + promid + '/' + promorid + '/' + Upromor.email
+		promorUrl = '/prm/' + promid + '/' + promorid + '/' + promorEmailEncrypt
 
-		# promeeurl
+		# promee url
 		promeeid = base36.dumps(Upromee.id)
-		promeeurl = '/prm/' + promid + '/' + promeeid + '/' + Upromee.email
+		promeeUrl = '/prm/' + promid + '/' + promeeid + '/' + promeeEmailEncrypt
 
 
 		# #################################################################
@@ -136,24 +147,24 @@ class PromView(View):
 
 		# #################################################################
 		# PROMISOR SEND MAIL
-		promortext = promoremail(promorencrypted, promeedecrypted, promorurl, request)
+		promortext = getPromorEmailText(promorEmailEncrypt, promeeEmail, promorUrl, request)
 		#assert False, request
 		send_mail(
-			'PromiseTracker: verify your promise.',
+			'Verify your promise.', # need to make this variable, in case promise request is sent
 			promortext,
 			"PromiseTracker<mail@PromiseTracker.com>",
-			[promordecrypted],
+			[promorEmail],
 			fail_silently=False,
 		)
 
 		# #################################################################
 		# PROMISEE SEND MAIL
-		promeetext = promeeEmail(promeeencrypted, promordecrypted, promeeurl, request)
+		promeetext = getPromeeEmailText(promeeEmailEncrypt, promorEmail, promeeUrl, request)
 		send_mail(
-			'PromiseTracker: someone made a promise to you.',
+			'Someone made a promise to you.', # need to make this variable, in case promise request is sent
 			promeetext,
 			"PromiseTracker<mail@PromiseTracker.com>",
-			[promeedecrypted],
+			[promeeEmail],
 			fail_silently=False,
 		)
 		# #################################################################
@@ -170,13 +181,13 @@ class PromView(View):
 			'message': message,
 			'promiseintro': promiseintro,
 			'promise': details,
-			'promorurl': promorurl,
-			'promeeurl': promeeurl,
+			'promorurl': promorUrl,
+			'promeeurl': promeeUrl,
 		}
 		return render(request, self.template, params)
 
 
-def promoremail(promorEncrypt, promeeEmail, promorurl, request):
+def getPromorEmailText(promorEmailEncrypt, promeeEmail, promorUrl, request):
 	host = request.get_host()
 	text = """
 You are making a promise to %s.
@@ -196,12 +207,12 @@ PromiseTracker
 To never receive another email from PromiseTracker.com, click here:
 %s/bl/%s
 
-""" % (promeeEmail, host, promorurl, host, promorEncrypt)
+""" % (promeeEmail, host, promorUrl, host, promorEmailEncrypt)
 
 	return text
 
 
-def promeeEmail(promeeEncrypt, promoremail, promeeUrl, request):
+def getPromeeEmailText(promeeEmailEncrypt, promorEmail, promeeUrl, request):
 	host = request.get_host()
 	text = """
 %s is making a promise to you.
@@ -221,19 +232,25 @@ PromiseTracker
 To never receive another email from PromiseTracker.com, click here:
 %s/bl/%s
 
-""" % (promoremail, host, promeeUrl, host, promeeEncrypt)
+""" % (promorEmail, host, promeeUrl, host, promeeEmailEncrypt)
 	return text
 
 
-def manage(request, promid, uid, encemail):
 
+
+#
+# Manage page. Where promisor/promisee approves and completes promise status.
+#
+def manage(request, promid, uid, emailEncrypted):
+
+	emailDecrypted = Encryption.decrypt(emailEncrypted)
 	current_url = request.path
 
 	# convert ids to integers
 	promid = base36.loads(promid)
 	uid = base36.loads(uid)
 
-	# VERIFY uid and encemail passed in URL
+	# VERIFY uid and emailDecrypted passed in URL
 	cursor = connection.cursor()
 	query = '''
 		SELECT
@@ -256,11 +273,11 @@ def manage(request, promid, uid, encemail):
 	row = cursor.fetchone()
 
 	if row:
-		(	idpromor,
-			empromor,
+		(	promorid,
+			promoremail,
 			promorapprdate,
-			idpromee,
-			empromee,
+			promeeid,
+			promeeemail,
 			promeeapprdate,
 			privacy,
 			status,
@@ -272,10 +289,10 @@ def manage(request, promid, uid, encemail):
 
 
 	# Who is this? the promisor, or promisee?
-	if (uid == idpromor) and (encemail == empromor):
+	if (uid == promorid) and (emailDecrypted == promoremail):
 		promisor = True
 		promisee = False
-	elif (uid == idpromee) and (encemail == empromee):
+	elif (uid == promeeid) and (emailDecrypted == promeeemail):
 		promisor = False
 		promisee = True
 	else:
@@ -325,6 +342,7 @@ def manage(request, promid, uid, encemail):
 			#if promorapprdate change status
 			#set database promeeapprdate to now
 			#promeeapprdate to now
+
 			current = timezone.now()
 			promise.objects.filter(promid=promid).update(
 				promeeapprdate = current,
@@ -409,13 +427,15 @@ def manage(request, promid, uid, encemail):
 	template = 'manage.html'
 	return render(request, template, params)
 
-
+#
+# Public page for everyone to view data for a promise
+#
 def public(request, promid):
 
 	# convert id to integers
 	promid = base36.loads(promid)
 
-	# VERIFY uid and encemail passed in URL
+	# GET promise detail based on promid passed in URL
 	cursor = connection.cursor()
 	query = '''
 		SELECT
@@ -438,11 +458,11 @@ def public(request, promid):
 	row = cursor.fetchone()
 
 	if row:
-		(	idpromor,
-			empromor,
+		(	promorid,
+			promoremail,
 			promorapprdate,
-			idpromee,
-			empromee,
+			promeeid,
+			promeeemail,
 			promeeapprdate,
 			privacy,
 			status,
@@ -471,19 +491,19 @@ def public(request, promid):
 #####################################################################
 # if user does not want to receive emails from us, blacklist it
 #####################################################################
-def blacklistEmail(request, encemail):
+def blacklistEmail(request, emailEncrypted):
 
 	template = 'blacklist.html'
 
 	# see if a valid email has been passed in
 	try:
-		decryptedemail = decrypt(encemail)
+		emailDecrypted = decrypt(emailEncrypted)
 		can_decrypt = True
 	except:
 		can_decrypt = False
 
 	try:
-		validate_email(decryptedemail)
+		validate_email(emailDecrypted)
 		valid_email = True
 	except:
 		valid_email = False
@@ -497,14 +517,14 @@ def blacklistEmail(request, encemail):
 
 
 	# see if the email address is already blacklisted
-	Blacklist = blacklist.objects.filter(email=encemail).first()
+	Blacklist = blacklist.objects.filter(email=emailEncrypted).first()
 
 	if Blacklist:
 		message = "Email address has already been blacklisted."
 	else:
 		# Create entry
 		Blacklist = blacklist.objects.create(
-			email = encemail,
+			email = emailEncrypted,
 		)
 		message = "Email blacklist successful. You will not hear from us again."
 

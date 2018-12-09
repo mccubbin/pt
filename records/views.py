@@ -3,8 +3,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
 
-from classes.encryption import Encryption
-
 import base36
 import datetime
 from django.utils import timezone
@@ -37,7 +35,7 @@ class RecordView(View):
 			#assert False, form
 			return render(request, self.template, params)
 
-		promorencrypted = Encryption.encrypt(form.cleaned_data['search'])
+		promorEmail = form.cleaned_data['search']
 
 		cursor = connection.cursor()
 		query = '''
@@ -57,7 +55,7 @@ class RecordView(View):
 			WHERE au.email = %s
 				AND status IN ('broken', 'fulfilled', 'draft')
 			ORDER BY mdate desc;'''
-		cursor.execute(query, [promorencrypted])
+		cursor.execute(query, [promorEmail])
 		rows = cursor.fetchall()
 
 		# mine data for stats
