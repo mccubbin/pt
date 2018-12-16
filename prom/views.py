@@ -6,6 +6,7 @@ import datetime
 from django.utils import timezone
 
 from classes.encryption import Encryption
+from classes.emailApprove import EmailApprove
 
 from django.db import connection
 from prom.models import promise, blacklist
@@ -38,18 +39,19 @@ class PromView(View):
 
 
 	def post(self, request, who):
+
 		who = ("promisor", "promisee")[who == 'send']
+
 		if who == 'promisor':
 			form = promorForm(request.POST)
 			title = "Congratulations.\nAccountability improves quality of life!"
 			promiseintro = "Your promise is"
-			other = "recipient"
+			receiver = "promisee"
 		else:
 			form = promeeForm(request.POST)
 			title = 'Promise sent for approval'
 			promiseintro = "You submitted this promise"
-			other = "promisor"
-		#assert False, request
+			receiver = "promisor"
 
 		# if error, rebuilt title, buttons according to who
 		if not form.is_valid():
@@ -130,48 +132,35 @@ class PromView(View):
 		# #################################################################
 		# MAKE URLS
 		# #################################################################
+		host = request.get_host()
 		promid = base36.dumps(prom.promid)
 
 		# promor url
 		promorid = base36.dumps(Upromor.id)
-		promorUrl = '/prm/' + promid + '/' + promorid + '/' + promorEmailEncrypt
+		promorUrl = host + '/prm/' + promid + '/' + promorid + '/' + promorEmailEncrypt
 
 		# promee url
 		promeeid = base36.dumps(Upromee.id)
-		promeeUrl = '/prm/' + promid + '/' + promeeid + '/' + promeeEmailEncrypt
+		promeeUrl = host + '/prm/' + promid + '/' + promeeid + '/' + promeeEmailEncrypt
 
 
 		# #################################################################
 		# SEND EMAILS HERE!!!!!!!!!!!!!
 		# #################################################################
+		senderContent = 'senderIs' + who.capitalize()
+		receiverContent = 'receiverIs' + receiver.capitalize()
 
-		# #################################################################
-		# PROMISOR SEND MAIL
-		promortext = getPromorEmailText(promorEmailEncrypt, promeeEmail, promorUrl, request)
-		#assert False, request
-		send_mail(
-			'Verify your promise.', # need to make this variable, in case promise request is sent
-			promortext,
-			"PromiseTracker<mail@PromiseTracker.com>",
-			[promorEmail],
-			fail_silently=False,
-		)
+		# SEND EMAIL TO SENDER
+		EmailApprove.sendEmail(promorEmail, promeeEmail, promorUrl, senderContent)
 
-		# #################################################################
-		# PROMISEE SEND MAIL
-		promeetext = getPromeeEmailText(promeeEmailEncrypt, promorEmail, promeeUrl, request)
-		send_mail(
-			'Someone made a promise to you.', # need to make this variable, in case promise request is sent
-			promeetext,
-			"PromiseTracker<mail@PromiseTracker.com>",
-			[promeeEmail],
-			fail_silently=False,
-		)
+		# SEND EMAIL TO RECEIVER
+		EmailApprove.sendEmail(promeeEmail, promorEmail, promeeUrl, receiverContent)
+
 		# #################################################################
 
 
 		message = (
-			'Emails sent out. Both you and the ' + other + ' '
+			'Emails sent out. Both you and the ' + receiver + ' '
 			'must approve this promise.\n'
 			'Please check your email to confirm.'
 		)
@@ -185,57 +174,6 @@ class PromView(View):
 			'promeeurl': promeeUrl,
 		}
 		return render(request, self.template, params)
-
-
-def getPromorEmailText(promorEmailEncrypt, promeeEmail, promorUrl, request):
-	host = request.get_host()
-	text = """
-You are making a promise to %s.
-
-Click here to Approve your promise:
-
-%s%s
-
-After both have approved this promise, use the link above to view the status of your promise.
-
-Thank you for using our free service,
-PromiseTracker
-
-
-
-
-To never receive another email from PromiseTracker.com, click here:
-%s/bl/%s
-
-""" % (promeeEmail, host, promorUrl, host, promorEmailEncrypt)
-
-	return text
-
-
-def getPromeeEmailText(promeeEmailEncrypt, promorEmail, promeeUrl, request):
-	host = request.get_host()
-	text = """
-%s is making a promise to you.
-
-Click here to Approve this promise:
-
-%s%s
-
-After both parties have approved this promise, use the link above to mark this promise as "Fulfilled" or "Broken".
-
-Thank you for using our free service,
-PromiseTracker
-
-
-
-
-To never receive another email from PromiseTracker.com, click here:
-%s/bl/%s
-
-""" % (promorEmail, host, promeeUrl, host, promeeEmailEncrypt)
-	return text
-
-
 
 
 #
@@ -381,7 +319,8 @@ def manage(request, promid, uid, emailEncrypted):
 			# button for promisor to approve
 			buttontype = 'approve'
 		elif status == 'draft' and promeeapprdate is None:
-			message += ('Promise not active. Promisee has not yet approved.')
+			message += ('Promise not active. Promisee has not yet approved. We will notify you '
+				'when the promisee has approved.')
 			# refresh button
 			buttontype = 'refresh'
 		elif status == 'pending':
@@ -399,7 +338,8 @@ def manage(request, promid, uid, emailEncrypted):
 			# button for promisee to approve
 			buttontype = 'approve'
 		elif status == 'draft' and promorapprdate is None:
-			message += ('Promise not active. Promisor has not yet approved.')
+			message += ('Promise not active. Promisor has not yet approved. We will notify you '
+				'when the promisor has approved.')
 			# refresh button
 			buttontype = 'refresh'
 		elif status == 'pending':

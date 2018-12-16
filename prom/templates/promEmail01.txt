@@ -1,0 +1,13 @@
+{% if info %}{{info|safe}}
+{% endif %}
+{{intro|safe}}
+
+{{instruct|safe}}
+
+https://promisetracker.com/prm/3wf3kj
+{% if notify %}
+{{notify|safe}}
+{% endif %}
+Thank you for using our free service,
+PromiseTracker
+
