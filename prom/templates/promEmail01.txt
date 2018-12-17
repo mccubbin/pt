@@ -2,9 +2,9 @@
 {% endif %}
 {{intro|safe}}
 
-{{instruct|safe}}
+{{instrTxt|safe}}
 
-https://promisetracker.com/prm/3wf3kj
+{{url}}
 {% if notify %}
 {{notify|safe}}
 {% endif %}

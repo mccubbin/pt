@@ -9,41 +9,6 @@ from prom.models import blacklist
 
 class promiseForm(forms.Form):
 
-	emailpromor = forms.EmailField(
-		required=True,
-		label="Your email",
-		# widget=forms.TextInput(attrs={'size':10, 'max_length':20}),
-	)
-	emailpromee = forms.EmailField(
-		required=True,
-		label="Email of recipient",
-	)
-	public = forms.BooleanField(
-		label="&nbsp;Public",
-		required=False,
-		widget=forms.CheckboxInput(attrs={
-		}),
-	)
-	details = forms.CharField(
-		required=True,
-		widget=forms.Textarea(attrs={
-			'rows':3,
-			'placeholder': 'text',
-		}),
-		max_length=2000,
-		label="Promise details",
-	)
-	# privacy = forms.ChoiceField(
-	# 	choices=RADIO,
-	# 	widget=forms.RadioSelect(),
-	# )
-	# compdate = forms.DateTimeField(
-	# 	widget=widgets.AdminSplitDateTime(),
-	# 	#input_formats = ('%d/%m/%Y', '%d/%m/%y', '%d-%m-%Y', '%d-%m-%y', '%Y-%m-%d'),
-	# 	required=False,
-	# 	label="Completion Date",
-	# )
-
 	def clean(self):
 		cleaned_data = super(promiseForm, self).clean()
 		emailpromor = cleaned_data.get('emailpromor')
@@ -84,10 +49,19 @@ class promorForm(promiseForm):
 		label="Your email",
 		# widget=forms.TextInput(attrs={'size':10, 'max_length':20}),
 	)
+
 	emailpromee = forms.EmailField(
 		required=True,
-		label="Email of recipient",
+		label="Promisee email",
 	)
+
+	public = forms.BooleanField(
+		label="&nbsp;Public",
+		required=False,
+		widget=forms.CheckboxInput(attrs={
+		}),
+	)
+
 	details = forms.CharField(
 		required=True,
 		widget=forms.Textarea(attrs={
@@ -110,10 +84,19 @@ class promeeForm(promiseForm):
 		required=True,
 		label="Your email",
 	)
+
 	emailpromor = forms.EmailField(
 		required=True,
 		label="Promisor email",
 	)
+
+	public = forms.BooleanField(
+		label="&nbsp;Public",
+		required=False,
+		widget=forms.CheckboxInput(attrs={
+		}),
+	)
+
 	details = forms.CharField(
 		required=True,
 		widget=forms.Textarea(attrs={
@@ -129,11 +112,11 @@ class promeeForm(promiseForm):
 # Check if email has been blacklisted
 #####################################################################
 def isBlacklisted(email):
-        encemail = Encryption.encrypt(email)
-        Blacklist = blacklist.objects.filter(email=encemail).first()
+	encemail = Encryption.encrypt(email)
+	Blacklist = blacklist.objects.filter(email=encemail).first()
 
-        if Blacklist:
-                return True
-        else:
-                return False
+	if Blacklist:
+		return True
+	else:
+		return False
 

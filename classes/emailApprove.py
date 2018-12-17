@@ -9,6 +9,7 @@ class EmailApprove:
 		'subject':	'Verify your promise.',
 		'intro':	'You are making a promise to {otherEmail}.',
 		'instruct':	'Click here to review and approve the details of this promise:',
+		'instrTxt':	'Click (or copy/paste) this link to review and approve the details of this promise:',
 		'button':	'Review and Approve Promise',
 		# 'notify':	'You will be notified when the promisee has also approved the details of this promise.',
 	}
@@ -17,6 +18,7 @@ class EmailApprove:
 		'info':		'PromiseTracker is a free online service that keeps a record of promises, and whether a promise is kept or not.',
 		'intro':	'{otherEmail} is making a promise to you.',
 		'instruct':	'Click here to review and approve the details of this promise:',
+		'instrTxt':	'Click (or copy/paste) this link to review and approve the details of this promise:',
 		'button':	'Review and Approve Promise',
 		# 'notify':	'You will be notified when this promise is approved by both parties and is active.',
 	}
@@ -24,6 +26,7 @@ class EmailApprove:
 		'subject':	'Verify your promise request.',
 		'intro':	'You are making a promise to {otherEmail}.',
 		'instruct':	'Click here to review and approve the details of this promise:',
+		'instrTxt':	'Click (or copy/paste) this link to review and approve the details of this promise:',
 		'button':	'Review and Approve Promise',
 		# 'notify':	'You will be notified when the promisor has also approved the details of this promise.',
 	}
@@ -32,6 +35,7 @@ class EmailApprove:
 		'info':		'PromiseTracker is a free online service that keeps a record of promises, and whether a promise is kept or not.',
 		'intro':	'{otherEmail} is requesting you to make a promise to them.',
 		'instruct':	'Click here to review and approve the details of this promise:',
+		'instrTxt':	'Click (or copy/paste) this link to review and approve the details of this promise:',
 		'button':	'Review and Approve Promise',
 		# 'notify':	'You will be notified when this promise is approved by both parties and is active.',
 		# 'notify':	'After you approve this promise, the promisee can mark the promise as "Broken" or "Fulfilled" at their convenience.',

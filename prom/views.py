@@ -32,7 +32,6 @@ class PromView(View):
 			form = promeeForm()
 			title = 'Send to promisor for approval'
 			btnvalue = 'Submit promise'
-		#assert False, who
 
 		params = {'title': title, 'form': form, 'btnvalue': btnvalue }
 		return render(request, self.template, params)
@@ -88,9 +87,6 @@ class PromView(View):
 				last_name = None,
 				is_active = None,
 			)
-		# promordecrypted = Encryption.decrypt(Upromor.email)
-		# print('hello ' + promordecrypted + '.')
-
 
 		# check for PROMEE email
 		Upromee = User.objects.filter(email=promeeEmail).first()
@@ -106,7 +102,6 @@ class PromView(View):
 				is_active = None,
 			)
 		# promeedecrypted = Encryption.decrypt(Upromee.email)
-		# print('hello ' + promeedecrypted + '.')
 
 
 		# INSERT INTO promise
