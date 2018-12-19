@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
 	url(
-		r'^(?P<promid>[\w\d]+)/(?P<uid>[\w\d]+)/(?P<emailEncrypted>[\w\d=\-]+)$',
+		r'^(?P<promid>[\w\d]+)/(?P<uid>[\w\d]+)/(?P<emailEncrypt>[\w\d=\-]+)$',
 		views.manage,
 		name='manage'
 	),

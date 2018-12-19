@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<head>
+	<title>Promise Approval</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style type="text/css">
+		div#wrapper {
+			max-width: 522px;
+			margin: 0 auto;
+		}
+		img {
+			display: block;
+			margin: 10px 0 20px 0;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		div.info {
+			color: #31708f;
+			background-color: #d9edf7;
+			border-color: #bce8f1;
+			padding: 10px 5px 10px 14px;
+			border: 1px solid transparent;
+			border-radius: 7px;
+			margin: 16px 0 0 0;
+		}
+		div.info>p {
+			margin: 0px;
+		}
+		p {
+			font-family: Roboto;
+			font-size: 16px;
+			line-height: 1.5;
+			text-align: left;
+			/*text-decoration: none !important;*/
+			/*color: #222;*/
+		}
+		div#button {
+			text-align: center;
+		}
+		/* In case we want the email address to be turned into a link */
+		/*p>a {
+			color: #15c;
+			text-decoration: none;
+			cursor: text;
+			pointer-events: none;
+		}*/
+		div>a {
+			margin: 0 auto;
+			background-color: #7B68EE;
+			border-radius: 28px;
+			border: 1px solid #3232CC;
+			display: inline-block;
+			cursor: pointer;
+			color: #ffffff !important;
+			font-family: Helvetica;
+			font-size: 19px;
+			padding: 12px 15px;
+			text-decoration: none;
+			text-shadow: 0px 1px 0px #2f6627;
+		}
+		div>a:hover {
+			background-color: #0000CD;
+			border: 1px solid #302B54;
+		}
+		div>a:active {
+			background-color: #4B0082;
+			border: 1px solid #302B54;
+			position: relative;
+			top: 1px;
+		}
+		hr#top {
+			border-top: 1px solid #000;
+			align: center;
+			width: 150px;
+		}
+		hr#bottom {
+			margin: 0;
+		}
+		p#companyinfo {
+			margin: 3px 0;
+			color: rgba(0,0,0,0.54);
+			font: 10px Helvetica-Light,Helvetica,Arial,sans-serif;
+		}
+		p#companyinfo>a {
+			text-decoration: none;
+		}
+	</style>
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<div id="wrapper">
+
+		<img src="https://s3.amazonaws.com/promisetracker/pt250.png" alt="PromiseTracker" />
+		<hr id=top>
+
+		<p>{{intro}}</p>
+
+		<div id="button">
+			<a href="{{url}}" target="_blank">{{button}}</a>
+		</div>
+
+		<p>{{new}}</p>
+
+		<div id="button">
+			<a href="https://PromiseTracker.com/make/" target="_blank">{{btnNew}}</a>
+		</div>
+
+		<p>
+			Thank you for using our free service,<br/>
+			PromiseTracker
+		</p>
+
+		<hr id="bottom">
+		<p id="companyinfo"><a href="https://PromiseTracker.com" target="_blank">PromiseTracker</a> - Keeping the world accountable.</p>
+
+	</div>
+
+</body>
+
+</html>

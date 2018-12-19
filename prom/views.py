@@ -4,9 +4,13 @@ from django.views import View
 import base36
 import datetime
 from django.utils import timezone
+import pytz
+
 
 from classes.encryption import Encryption
 from classes.emailApprove import EmailApprove
+from classes.emailActive import EmailActive
+from classes.emailComplete import EmailComplete
 
 from django.db import connection
 from prom.models import promise, blacklist
@@ -174,10 +178,11 @@ class PromView(View):
 #
 # Manage page. Where promisor/promisee approves and completes promise status.
 #
-def manage(request, promid, uid, emailEncrypted):
+def manage(request, promid, uid, emailEncrypt):
 
-	emailDecrypted = Encryption.decrypt(emailEncrypted)
+	emailDecrypted = Encryption.decrypt(emailEncrypt)
 	current_url = request.path
+	promIdB36 = promid
 
 	# convert ids to integers
 	promid = base36.loads(promid)
@@ -223,11 +228,15 @@ def manage(request, promid, uid, emailEncrypted):
 
 	# Who is this? the promisor, or promisee?
 	if (uid == promorid) and (emailDecrypted == promoremail):
-		promisor = True
-		promisee = False
+		who = 'promisor'
+		other = 'promisee'
+		otherEmail = promeeemail
+		otherId = promeeid
 	elif (uid == promeeid) and (emailDecrypted == promeeemail):
-		promisor = False
-		promisee = True
+		who = 'promisee'
+		other = 'promisor'
+		otherEmail = promoremail
+		otherId = promorid
 	else:
 		return redirect('/404/error/')
 
@@ -249,11 +258,11 @@ def manage(request, promid, uid, emailEncrypted):
 				status = 'delete'
 			)
 
-		elif promisor and do == 'approve' and promorapprdate == None:
+		elif who == 'promisor' and do == 'approve' and promorapprdate == None:
 			if promeeapprdate:
 				status = 'pending'
 			else:
-				status = 'draft'
+				status = 'draft' # redundant, but keep it for clarity
 
 			#set database promorapprdate to now
 			#update mdate too
@@ -267,11 +276,12 @@ def manage(request, promid, uid, emailEncrypted):
 			)
 			promorapprdate = current
 
-		elif promisee and do == 'approve' and promeeapprdate == None:
+		elif who == 'promisee' and do == 'approve' and promeeapprdate == None:
 			if promorapprdate:
 				status = 'pending'
 			else:
-				status = 'draft'
+				status = 'draft' # redundant, but keep it for clarity
+
 			#if promorapprdate change status
 			#set database promeeapprdate to now
 			#promeeapprdate to now
@@ -284,7 +294,7 @@ def manage(request, promid, uid, emailEncrypted):
 			)
 			promeeapprdate = current
 
-		elif promisee and status == 'pending' and (do == 'broken' or do == 'fulfilled'):
+		elif who == 'promisee' and status == 'pending' and (do == 'broken' or do == 'fulfilled'):
 			status = do
 
 			current = timezone.now()
@@ -293,6 +303,31 @@ def manage(request, promid, uid, emailEncrypted):
 				status = status
 			)
 			mdate = current
+
+
+		# ######################################################################
+		# if promise changed to active or complete, notify other party
+		# ######################################################################
+		if status in ['pending', 'broken', 'fulfilled']:
+			host = request.get_host()
+			otherEmailEncrypt = Encryption.encrypt(otherEmail)
+			otherIdB36 = base36.dumps(otherId)
+			otherUrl = host + '/prm/' + promIdB36 + '/' + otherIdB36 + '/' + otherEmailEncrypt
+
+			# if status changed to active/pending, send notification email to other
+			if status == 'pending':
+				EmailActive.sendEmail(otherEmail, emailDecrypted, otherUrl, other)
+
+				# if promisee just activated the promise, send them a Reference email so they can come back later
+				if who == 'promisee':
+					EmailActive.sendEmail(otherEmail, emailDecrypted, otherUrl, who + 'Reference')
+
+			else:
+				# If status marked complete, send notification email to other/promisor
+				EmailComplete.sendEmail(otherEmail, emailDecrypted, otherUrl, status)
+
+
+
 
 		# redirect to current url so refresh won't ask to post again
 		return redirect(current_url)
@@ -307,7 +342,7 @@ def manage(request, promid, uid, emailEncrypted):
 		# DELETE promise from database
 		promise.objects.filter(promid=promid).delete()
 		message += 'Promise does not exist anymore.'
-	elif promisor:
+	elif who == 'promisor':
 		if status == 'draft' and promorapprdate is None:
 			message += ('Promise not active. Click to approve this promise.\n'
 				'You can also delete this promise.')
@@ -326,7 +361,7 @@ def manage(request, promid, uid, emailEncrypted):
 		elif status == 'broken' or status == 'fulfilled':
 			message += ('This promise was marked as "' + status.capitalize() + '" ' + onOrAt(mdate) +
 						' <span data-utc="' + str(mdate) + '" class="localtime"></span>.')
-	elif promisee:
+	elif who == 'promisee':
 		if status == 'draft' and promeeapprdate is None:
 			message += ('Promise not active. Click to approve this promise.\n'
 				'You can also delete this promise.')
@@ -337,9 +372,15 @@ def manage(request, promid, uid, emailEncrypted):
 				'when the promisor has approved.')
 			# refresh button
 			buttontype = 'refresh'
-		elif status == 'pending':
-			message += ('Promise is active and pending. If complete, click '
-				'to mark this promise as broken or fulfilled.')
+		elif status == 'pending' and promeeapprdate < (datetime.datetime.now(pytz.utc) + datetime.timedelta(minutes=1)):
+			# if promisee just Approved the promise, tell them we sent them an email
+			message += ('Promise is now active! We just sent you an email. When the promisor has kept (or broken) '
+				'this promise, click on the link in the email to come back here.')
+			# BUTTONS for Promise broken, or Promise fulfilled
+			buttontype = 'complete'
+		elif status == 'pending' and promeeapprdate >= (datetime.datetime.now(pytz.utc) + datetime.timedelta(minutes=1)):
+			# if promisee is coming back to this promise, give them regular instructions
+			message += ('Promise is not yet complete. Click "Fulfilled" or "Broken" whenever you are ready.')
 			# BUTTONS for Promise broken, or Promise fulfilled
 			buttontype = 'complete'
 		elif status == 'broken' or status == 'fulfilled':
@@ -426,13 +467,13 @@ def public(request, promid):
 #####################################################################
 # if user does not want to receive emails from us, blacklist it
 #####################################################################
-def blacklistEmail(request, emailEncrypted):
+def blacklistEmail(request, emailEncrypt):
 
 	template = 'blacklist.html'
 
 	# see if a valid email has been passed in
 	try:
-		emailDecrypted = decrypt(emailEncrypted)
+		emailDecrypted = decrypt(emailEncrypt)
 		can_decrypt = True
 	except:
 		can_decrypt = False
@@ -452,14 +493,14 @@ def blacklistEmail(request, emailEncrypted):
 
 
 	# see if the email address is already blacklisted
-	Blacklist = blacklist.objects.filter(email=emailEncrypted).first()
+	Blacklist = blacklist.objects.filter(email=emailEncrypt).first()
 
 	if Blacklist:
 		message = "Email address has already been blacklisted."
 	else:
 		# Create entry
 		Blacklist = blacklist.objects.create(
-			email = emailEncrypted,
+			email = emailEncrypt,
 		)
 		message = "Email blacklist successful. You will not hear from us again."
 
@@ -475,7 +516,6 @@ def blacklistEmail(request, emailEncrypted):
 # For displaying a date or time: if within 24 hours, return "at"; otherwise "on"
 #
 def onOrAt(past_date):
-	import pytz
 	now = datetime.datetime.now(pytz.utc)
 	difference = now - past_date
 
