@@ -20,8 +20,8 @@ class EmailApprove:
 		'button':	'Review and Approve Promise',
 	}
 	senderIsPromisee = {
-		'subject':	'Verify your promise request.',
-		'intro':	'You are making a promise to {otherEmail}.',
+		'subject':	'Verify your request for a promise.',
+		'intro':	'You requested for {otherEmail} to make a promise to you.',
 		'instruct':	'Click here to review and approve the details of this promise:',
 		'instrTxt':	'Click (or copy/paste) this link to review and approve the details of this promise:',
 		'button':	'Review and Approve Promise',

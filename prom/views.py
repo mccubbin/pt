@@ -47,14 +47,8 @@ class PromView(View):
 
 		if who == 'promisor':
 			form = promorForm(request.POST)
-			title = "Congratulations.\nAccountability improves quality of life!"
-			promiseintro = "Your promise is"
-			receiver = "promisee"
 		else:
 			form = promeeForm(request.POST)
-			title = 'Promise sent for approval'
-			promiseintro = "You submitted this promise"
-			receiver = "promisor"
 
 		# if error, rebuilt title, buttons according to who
 		if not form.is_valid():
@@ -144,23 +138,43 @@ class PromView(View):
 
 
 		# #################################################################
+		# customize display text and emails based on if this is the promisor or promisee
+		# #################################################################
+		if who == 'promisor':
+			title = "Congratulations.\nAccountability improves quality of life!"
+			promiseintro = "Your promise is"
+			senderEmail = promorEmail
+			receiverEmail = promeeEmail
+			receiver = "promisee"
+			senderUrl = promorUrl
+			receiverUrl = promeeUrl
+		else:
+			title = 'Promise sent for approval'
+			promiseintro = "You submitted this promise"
+			senderEmail = promeeEmail
+			receiverEmail = promorEmail
+			receiver = "promisor"
+			senderUrl = promeeUrl
+			receiverUrl = promorUrl
+
+
+		# #################################################################
 		# SEND EMAILS HERE!!!!!!!!!!!!!
 		# #################################################################
 		senderContent = 'senderIs' + who.capitalize()
 		receiverContent = 'receiverIs' + receiver.capitalize()
 
 		# SEND EMAIL TO SENDER
-		EmailApprove.sendEmail(promorEmail, promeeEmail, promorUrl, senderContent)
+		EmailApprove.sendEmail(senderEmail, receiverEmail, senderUrl, senderContent)
 
 		# SEND EMAIL TO RECEIVER
-		EmailApprove.sendEmail(promeeEmail, promorEmail, promeeUrl, receiverContent)
+		EmailApprove.sendEmail(receiverEmail, senderEmail, receiverUrl, receiverContent)
 
 		# #################################################################
 
 
 		message = (
-			'Emails sent out. Both you and the ' + receiver + ' '
-			'must approve this promise.\n'
+			'Emails sent out. Both you and the ' + receiver + ' must approve this promise.\n'
 			'Please check your email to confirm.'
 		)
 
@@ -181,7 +195,7 @@ class PromView(View):
 def manage(request, promid, uid, emailEncrypt):
 
 	emailDecrypted = Encryption.decrypt(emailEncrypt)
-	current_url = request.path
+	currentUrl = request.path
 	promIdB36 = promid
 
 	# convert ids to integers
@@ -320,7 +334,8 @@ def manage(request, promid, uid, emailEncrypt):
 
 				# if promisee just activated the promise, send them a Reference email so they can come back later
 				if who == 'promisee':
-					EmailActive.sendEmail(otherEmail, emailDecrypted, otherUrl, who + 'Reference')
+					currentHostUrl = host + '/' + currentUrl
+					EmailActive.sendEmail(emailDecrypted, otherEmail, currentHostUrl, 'promiseeReference')
 
 			else:
 				# If status marked complete, send notification email to other/promisor
@@ -330,7 +345,7 @@ def manage(request, promid, uid, emailEncrypt):
 
 
 		# redirect to current url so refresh won't ask to post again
-		return redirect(current_url)
+		return redirect(currentUrl)
 	# endif request.POST:
 
 	title = 'Manage promise'
@@ -372,17 +387,18 @@ def manage(request, promid, uid, emailEncrypt):
 				'when the promisor has approved.')
 			# refresh button
 			buttontype = 'refresh'
-		elif status == 'pending' and promeeapprdate < (datetime.datetime.now(pytz.utc) + datetime.timedelta(minutes=1)):
-			# if promisee just Approved the promise, tell them we sent them an email
-			message += ('Promise is now active! We just sent you an email. When the promisor has kept (or broken) '
-				'this promise, click on the link in the email to come back here.')
+		elif status == 'pending':
 			# BUTTONS for Promise broken, or Promise fulfilled
 			buttontype = 'complete'
-		elif status == 'pending' and promeeapprdate >= (datetime.datetime.now(pytz.utc) + datetime.timedelta(minutes=1)):
-			# if promisee is coming back to this promise, give them regular instructions
-			message += ('Promise is not yet complete. Click "Fulfilled" or "Broken" whenever you are ready.')
-			# BUTTONS for Promise broken, or Promise fulfilled
-			buttontype = 'complete'
+
+			# if promisee just Approved the promise, tell them we sent them an email, else don't tell them
+			difference = datetime.datetime.now(pytz.utc) - promeeapprdate
+
+			if difference.seconds <= 20:
+				message += ('Promise is now active! We just sent you an email. When the promisor has kept (or broken) '
+					'this promise, click on the link in the email to come back here.')
+			else:
+				message += ('Promise is not yet complete. Click "Fulfilled" or "Broken" whenever you are ready.')
 		elif status == 'broken' or status == 'fulfilled':
 			#mdate = "2008-09-15T15:53:00+01:00"
 			message = ('You marked this promise as "' + status.capitalize() + '" ' + onOrAt(mdate) +
@@ -398,7 +414,7 @@ def manage(request, promid, uid, emailEncrypt):
 		'title': title,
 		'message': message,
 		'buttontype': buttontype,
-		'current_url': current_url,
+		'current_url': currentUrl,
 	}
 	template = 'manage.html'
 	return render(request, template, params)

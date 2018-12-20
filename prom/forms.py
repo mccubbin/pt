@@ -40,8 +40,7 @@ class promorForm(promiseForm):
 
 	PROMISETEXT = (
 		'I, [your name], promise to go to brunch this Saturday '
-		'with Mark and Lana. '
-		'(even though I really don\'t want to go)'
+		'with Mark and Christina.'
 	)
 
 	emailpromor = forms.EmailField(
