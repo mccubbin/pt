@@ -32,19 +32,10 @@
 			font-size: 16px;
 			line-height: 1.5;
 			text-align: left;
-			/*text-decoration: none !important;*/
-			/*color: #222;*/
 		}
-		div#button {
+		div.button {
 			text-align: center;
 		}
-		/* In case we want the email address to be turned into a link */
-		/*p>a {
-			color: #15c;
-			text-decoration: none;
-			cursor: text;
-			pointer-events: none;
-		}*/
 		div>a {
 			margin: 0 auto;
 			background-color: #7B68EE;
@@ -55,7 +46,7 @@
 			color: #ffffff !important;
 			font-family: Helvetica;
 			font-size: 19px;
-			padding: 12px 15px;
+			padding: 12px 20px;
 			text-decoration: none;
 			text-shadow: 0px 1px 0px #2f6627;
 		}
@@ -85,6 +76,45 @@
 		p#companyinfo>a {
 			text-decoration: none;
 		}
+
+
+
+
+
+
+
+		/*.css-button {
+				display: inline-block;
+				cursor: pointer;
+				color: #FFFFFF;
+				font-family: Arial;
+				font-size: 19px;
+				border-radius: 4px;
+				border: solid 1px #95ab90;
+				background: linear-gradient(180deg, #63B8EE 5%, #468ccf 100%);
+				text-shadow: 1px 1px 0px #528ecc;
+				box-shadow: inset 1px 1px 0px 0px #bbdaf7;
+		}
+		.css-button:hover {
+				background: linear-gradient(180deg, #468ccf 5%, #63B8EE 100%);
+		}
+		.css-button:active {
+				position: relative;
+				top: 1px;
+		}
+		.css-button-text {
+				padding: 7px 10px;
+				float: right;
+		}
+		.css-button-icon {
+				border-left: 1px solid rgba(255, 255, 255, 0.16);
+				box-shadow: rgba(0, 0, 0, 0.14) 1px 0px 0px inset;
+				border-radius: 0 4px 4px 0;
+				font-size: 19px;
+				padding: 7px 10px;
+				float: right;
+		}*/
+
 	</style>
 
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
@@ -98,15 +128,27 @@
 
 		<p>{{intro}}</p>
 
-		<div id="button">
-			<a href="{{url}}" target="_blank">{{button}}</a>
+		<div class="button">
+			<a href="{{url}}" target="_blank">View Promise</a>
 		</div>
 
 		<p>{{new}}</p>
+		<!-- <p>Click here to create another promise:</p> -->
 
-		<div id="button">
-			<a href="https://PromiseTracker.com/make/" target="_blank">{{btnNew}}</a>
+		<div class="button">
+			<a href="https://PromiseTracker.com/make/" target="_blank">Make New Promise</a>
 		</div>
+
+		<p><p/>
+
+		<div class="button">
+			<a href="https://PromiseTracker.com/send/" target="_blank">Send Promise Request</a>
+		</div>
+
+		<!-- <a href="https://PromiseTracker.com/make/" target="_blank" class="css-button">
+			<span class="css-button-icon"><i class="fa fa-arrow-right" aria-hidden="true"></i></span>
+			<span class="css-button-text">Make Another Promise</span>
+		</a> -->
 
 		<p>
 			Thank you for using our free service,<br/>

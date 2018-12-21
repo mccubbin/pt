@@ -1,6 +1,6 @@
 {% if info %}{{info|safe}}
-{% endif %}
-{{intro|safe}}
+
+{% endif %}{{intro|safe}}
 
 {{instrTxt|safe}}
 

@@ -57,8 +57,14 @@ urlpatterns = [
 		promviews.PromView.as_view(),
 	),
 	url(
-		r'^prm/',
-		include('prom.urls')
+		r'^(?P<promid>[\w\d]+)/(?P<emailEncrypt>[\w\d=\-]+)$',
+		promviews.manage,
+		name='manage'
+	),
+	url(
+		r'^(?P<promid>[\w\d]+)/$',
+		promviews.public,
+		name='public'
 	),
 	url(
 		r'^bl/(?P<encemail>[\w\d=\-]+)$',

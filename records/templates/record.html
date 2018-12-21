@@ -70,14 +70,12 @@
 
 			{% for row in rows %}
 				{% if row.1 == "public" %}
-					<a href = "/prm/{{row.0|encode36}}/" style="text-decoration:none;color: black;">
+					<a href = "/{{row.0|encode36}}/" style="text-decoration:none;color: black;">
 						<div class="well" style="margin-bottom:15px;padding-bottom:5px;padding-top:5px;">
 							<h4>Status: {{ row.2|capfirst }}</h4>
 							<p>Created: <span data-utc="{{row.3}}" class="localtime"></span></p>
 							<p>Completed: <span data-utc="{{row.4}}" class="localtime"></span></p>
 							<p>Details: {{ row.5 }}</p>
-							<!-- {{ row.date|date:"Y-m-d" }}
-							<a href="/prm/{{row.promid}}"> {{row.details}}</a>-->
 						</div>
 					</a>
 				{% endif %}

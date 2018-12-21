@@ -6,17 +6,15 @@ class EmailComplete:
 
 	fulfilled = {
 		'subject':	'Promise complete. Status: Fulfilled!',
-		'intro':	'Congratulations! {otherEmail} has marked your promise as "Fulfilled"',
-		'button':	'View Promise',
-		'new':		'Click below if you would like to make another promise or send a promise request:',
-		'btnNew':	'Make New Promise',
+		'intro':	'Congratulations! {otherEmail} has marked your promise as "Fulfilled".',
+		'new':		'Click below to make another promise or send a promise request:',
+		'newTxt':	'Use the links below to make another promise or send a promise request:',
 	}
 	broken = {
 		'subject':	'Promise complete. Status: Broken',
-		'intro':	'{otherEmail} has marked your promise as "Fulfilled"',
-		'button':	'View Promise',
-		'new':		'Click below if you would like to make another promise or send a promise request:',
-		'btnNew':	'Make New Promise',
+		'intro':	'{otherEmail} has marked your promise as "Broken".',
+		'new':		'Click below to make another promise or send a promise request:',
+		'newTxt':	'Use the links below to make another promise or send a promise request:',
 	}
 
 	@classmethod

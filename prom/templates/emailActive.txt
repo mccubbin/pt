@@ -5,8 +5,7 @@
 {{url|safe}}
 {% if notify %}
 {{notify|safe}}
-{% endif %}
-{% if notify2 %}
+{% endif %}{% if notify2 %}
 {{notify2|safe}}
 {% endif %}
 Thank you for using our free service,

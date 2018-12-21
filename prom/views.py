@@ -130,11 +130,11 @@ class PromView(View):
 
 		# promor url
 		promorid = base36.dumps(Upromor.id)
-		promorUrl = host + '/prm/' + promid + '/' + promorid + '/' + promorEmailEncrypt
+		promorUrl = host + '/' + promid + '/' + promorEmailEncrypt
 
 		# promee url
 		promeeid = base36.dumps(Upromee.id)
-		promeeUrl = host + '/prm/' + promid + '/' + promeeid + '/' + promeeEmailEncrypt
+		promeeUrl = host + '/' + promid + '/' + promeeEmailEncrypt
 
 
 		# #################################################################
@@ -192,7 +192,7 @@ class PromView(View):
 #
 # Manage page. Where promisor/promisee approves and completes promise status.
 #
-def manage(request, promid, uid, emailEncrypt):
+def manage(request, promid, emailEncrypt):
 
 	emailDecrypted = Encryption.decrypt(emailEncrypt)
 	currentUrl = request.path
@@ -200,9 +200,9 @@ def manage(request, promid, uid, emailEncrypt):
 
 	# convert ids to integers
 	promid = base36.loads(promid)
-	uid = base36.loads(uid)
+	#assert False, promid
 
-	# VERIFY uid and emailDecrypted passed in URL
+	# VERIFY emailDecrypted passed in URL
 	cursor = connection.cursor()
 	query = '''
 		SELECT
@@ -241,12 +241,12 @@ def manage(request, promid, uid, emailEncrypt):
 
 
 	# Who is this? the promisor, or promisee?
-	if (uid == promorid) and (emailDecrypted == promoremail):
+	if emailDecrypted == promoremail:
 		who = 'promisor'
 		other = 'promisee'
 		otherEmail = promeeemail
 		otherId = promeeid
-	elif (uid == promeeid) and (emailDecrypted == promeeemail):
+	elif emailDecrypted == promeeemail:
 		who = 'promisee'
 		other = 'promisor'
 		otherEmail = promoremail
@@ -325,8 +325,7 @@ def manage(request, promid, uid, emailEncrypt):
 		if status in ['pending', 'broken', 'fulfilled']:
 			host = request.get_host()
 			otherEmailEncrypt = Encryption.encrypt(otherEmail)
-			otherIdB36 = base36.dumps(otherId)
-			otherUrl = host + '/prm/' + promIdB36 + '/' + otherIdB36 + '/' + otherEmailEncrypt
+			otherUrl = host + '/' + promIdB36 + '/' + otherEmailEncrypt
 
 			# if status changed to active/pending, send notification email to other
 			if status == 'pending':
@@ -334,14 +333,12 @@ def manage(request, promid, uid, emailEncrypt):
 
 				# if promisee just activated the promise, send them a Reference email so they can come back later
 				if who == 'promisee':
-					currentHostUrl = host + '/' + currentUrl
+					currentHostUrl = host + currentUrl
 					EmailActive.sendEmail(emailDecrypted, otherEmail, currentHostUrl, 'promiseeReference')
 
 			else:
 				# If status marked complete, send notification email to other/promisor
 				EmailComplete.sendEmail(otherEmail, emailDecrypted, otherUrl, status)
-
-
 
 
 		# redirect to current url so refresh won't ask to post again

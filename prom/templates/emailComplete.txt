@@ -2,8 +2,10 @@
 
 {{url|safe}}
 
-{{new|safe}}
-https://PromiseTracker.com/make/
+{{newTxt|safe}}
+
+Make New Promise: https://PromiseTracker.com/make
+Send Promise Request: https://PromiseTracker.com/send
 
 Thank you for using our free service,
 PromiseTracker
