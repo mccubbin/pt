@@ -30,8 +30,8 @@ class EmailActive:
 		fromEmail = 'PromiseTracker<mail@PromiseTracker.com>'
 
 		# set up email message
-		plaintext = get_template('EmailActive.txt')
-		html = get_template('EmailActive.html')
+		plaintext = get_template('emailActive.txt')
+		html = get_template('emailActive.html')
 
 		# fetch class dictionary via string contentDict value
 		params = getattr(cls, contentDict)
