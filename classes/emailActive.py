@@ -5,20 +5,20 @@ from django.template.loader import get_template
 class EmailActive:
 
 	promisor = {
-		'subject':	'Promise is now active!',
+		'subject':	'Your promise is now active!',
 		'intro':	'{otherEmail} has approved your promise.',
 		'button':	'View Promise',
 		'notify':	'It is now up to you to do what you have promised.',
 		'notify2':	'The promisee must decide to mark the promise as "Broken" or "Fulfilled". When they do, we will notify you.',
 	}
 	promisee = {
-		'subject':	'Promise is now active!',
+		'subject':	'Did they keep their promise?',
 		'intro':	'{otherEmail} has approved this promise.',
-		'instruct':	'When the promisor has kept (or broken) this promise, please go to this link and mark the promise as "Fulfilled" or "Broken".',
+		'instruct':	'Whenever you are ready, please go to this link and mark the promise as "Fulfilled" or "Broken".',
 		'button':	'Mark Promise Status',
 	}
 	promiseeReference = {
-		'subject':	'Promise is now active!',
+		'subject':	'Did they keep their promise?',
 		'intro':	'You have approved this promise.',
 		'instruct':	'Whenever you are ready, please go to this link and mark the promise as "Fulfilled" or "Broken".',
 		'button':	'Mark Promise Status',

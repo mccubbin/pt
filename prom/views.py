@@ -372,7 +372,7 @@ def manage(request, promid, emailEncrypt):
 			buttontype = 'refresh'
 		elif status == 'broken' or status == 'fulfilled':
 			message += ('This promise was marked as "' + status.capitalize() + '" ' + onOrAt(mdate) +
-						' <span data-utc="' + str(mdate) + '" class="localtime"></span>.')
+						' <span data-utc="' + mdate.isoformat() + '" class="localtime"></span>.')
 	elif who == 'promisee':
 		if status == 'draft' and promeeapprdate is None:
 			message += ('Promise not active. Click to approve this promise.\n'
@@ -399,7 +399,7 @@ def manage(request, promid, emailEncrypt):
 		elif status == 'broken' or status == 'fulfilled':
 			#mdate = "2008-09-15T15:53:00+01:00"
 			message = ('You marked this promise as "' + status.capitalize() + '" ' + onOrAt(mdate) +
-						' <span data-utc="' + str(mdate) + '" class="localtime"></span>.')
+						' <span data-utc="' + mdate.isoformat() + '" class="localtime"></span>.')
 
 	#assert False, message
 
