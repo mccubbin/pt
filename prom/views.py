@@ -37,7 +37,12 @@ class PromView(View):
 			title = 'Send to promisor for approval'
 			btnvalue = 'Submit promise'
 
-		params = {'title': title, 'form': form, 'btnvalue': btnvalue }
+		params = {
+			'webcrawl': True,
+			'title': title,
+			'form': form,
+			'btnvalue': btnvalue,
+		}
 		return render(request, self.template, params)
 
 

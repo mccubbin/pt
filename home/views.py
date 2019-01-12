@@ -10,6 +10,7 @@ def index(request):
 
 	promcount = promise.objects.count()
 	params = {
+		'webcrawl': True,
 		'promcount': promcount,
 	}
 

@@ -20,7 +20,11 @@ class RecordView(View):
 		form = searchForm()
 		#assert False, request
 
-		params = {'form': form, 'nosearch': True}
+		params = {
+			'webcrawl': True,
+			'form': form,
+			'nosearch': True,
+		}
 		return render(request, self.template, params)
 
 	def post(self, request):
