@@ -116,7 +116,7 @@ WSGI_APPLICATION = '_conf_files.wsgi.application'
 
 DATABASES = {
 	'default': {
-		'HOST': 'promisetrackerdb.c58wcafefiff.us-east-2.rds.amazonaws.com',
+		'HOST': 'ptdb.c58wcafefiff.us-east-2.rds.amazonaws.com',
 		'PORT': '5432',
 		'ENGINE': 'django.db.backends.postgresql_psycopg2',
 		'NAME': 'ptdb',
