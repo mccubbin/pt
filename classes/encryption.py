@@ -109,7 +109,7 @@ class Encryption:
 class BtSchemes:
 
 	BASE56 = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789"
-	BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+	BASE62 = "0ABCDEFGHIJKLMNOPQRSTUVWXYZ1abcdefghijklmnopqrstuvwxyz23456789"
 
 	# Encode a positive number in Base X
 	# Arguments:
