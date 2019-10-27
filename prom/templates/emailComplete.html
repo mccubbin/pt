@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+<html>
 
 <head>
 	<title>Promise Approval</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style type="text/css">
-		table#wrapper {
+		table.wrapper {
 			max-width: 522px;
 			margin: 0 auto;
 		}
@@ -15,28 +16,15 @@
 			margin-left: auto;
 			margin-right: auto;
 		}
-		div.info {
-			color: #31708f;
-			background-color: #d9edf7;
-			border-color: #bce8f1;
-			padding: 10px 5px 10px 14px;
-			border: 1px solid transparent;
-			border-radius: 7px;
-			margin: 16px 0 0 0;
-		}
-		div.info>p {
-			margin: 0px;
-		}
 		p {
 			font-family: Roboto;
 			font-size: 16px;
-			line-height: 1.5;
+			line-height: 1.5em;
 			text-align: left;
+			margin: 16px 0;
+			padding: 0;
 		}
-		div.button {
-			text-align: center;
-		}
-		div>a {
+		.button {
 			margin: 0 auto;
 			background-color: #7B68EE;
 			border-radius: 28px;
@@ -50,11 +38,11 @@
 			text-decoration: none;
 			text-shadow: 0px 1px 0px #2f6627;
 		}
-		div>a:hover {
+		.button:hover {
 			background-color: #0000CD;
 			border: 1px solid #302B54;
 		}
-		div>a:active {
+		.button:active {
 			background-color: #4B0082;
 			border: 1px solid #302B54;
 			position: relative;
@@ -76,81 +64,52 @@
 		p#companyinfo>a {
 			text-decoration: none;
 		}
-
-
-
-
-
-
-
-		/*.css-button {
-				display: inline-block;
-				cursor: pointer;
-				color: #FFFFFF;
-				font-family: Arial;
-				font-size: 19px;
-				border-radius: 4px;
-				border: solid 1px #95ab90;
-				background: linear-gradient(180deg, #63B8EE 5%, #468ccf 100%);
-				text-shadow: 1px 1px 0px #528ecc;
-				box-shadow: inset 1px 1px 0px 0px #bbdaf7;
-		}
-		.css-button:hover {
-				background: linear-gradient(180deg, #468ccf 5%, #63B8EE 100%);
-		}
-		.css-button:active {
-				position: relative;
-				top: 1px;
-		}
-		.css-button-text {
-				padding: 7px 10px;
-				float: right;
-		}
-		.css-button-icon {
-				border-left: 1px solid rgba(255, 255, 255, 0.16);
-				box-shadow: rgba(0, 0, 0, 0.14) 1px 0px 0px inset;
-				border-radius: 0 4px 4px 0;
-				font-size: 19px;
-				padding: 7px 10px;
-				float: right;
-		}*/
-
 	</style>
 
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-	<table width="522" cellpadding="0" cellspacing="0" align="center" id="wrapper">
+	<table width="522" cellpadding="0" cellspacing="0" align="center" class="wrapper">
 		<tr>
 			<td>
 
 				<img src="https://s3.amazonaws.com/promisetracker/pt250.png" alt="PromiseTracker" />
-				<hr id=top>
+				<hr id="top">
 
 				<p>{{intro}}</p>
 
-				<div class="button">
-					<a href="{{url}}" target="_blank">View Promise</a>
-				</div>
+				<table cellpadding="0" cellspacing="0" border="0" class="wrapper">
+					<tr>
+						<td>
+							<a href="{{url}}" target="_blank" class="button">View Promise</a>
+						</td>
+					</tr>
+				</table>
 
 				<p>{{new}}</p>
-				<!-- <p>Click here to create another promise:</p> -->
 
-				<div class="button">
-					<a href="https://PromiseTracker.com/make/" target="_blank">Make New Promise</a>
-				</div>
+				<table cellpadding="0" cellspacing="0" border="0" class="wrapper">
+					<tr>
+						<td>
+							<a href="https://PromiseTracker.com/make/" target="_blank" class="button">
+								Make New Promise
+							</a>
+						</td>
+					</tr>
+				</table>
 
 				<p></p>
 
-				<div class="button">
-					<a href="https://PromiseTracker.com/send/" target="_blank">Send Promise Request</a>
-				</div>
-
-				<!-- <a href="https://PromiseTracker.com/make/" target="_blank" class="css-button">
-					<span class="css-button-icon"><i class="fa fa-arrow-right" aria-hidden="true"></i></span>
-					<span class="css-button-text">Make Another Promise</span>
-				</a> -->
+				<table cellpadding="0" cellspacing="0" border="0" class="wrapper">
+					<tr>
+						<td>
+							<a href="https://PromiseTracker.com/send/" target="_blank" class="button">
+								Send Promise Request
+							</a>
+						</td>
+					</tr>
+				</table>
 
 				<p>
 					Thank you for using our free service,<br/>
@@ -158,7 +117,9 @@
 				</p>
 
 				<hr id="bottom">
-				<p id="companyinfo"><a href="https://PromiseTracker.com" target="_blank">PromiseTracker</a> - Keeping the world accountable.</p>
+				<p id="companyinfo">
+					<a href="https://PromiseTracker.com" target="_blank">PromiseTracker</a> - Keeping the world accountable.
+				</p>
 
 			</td>
 		</tr>
